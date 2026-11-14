@@ -1,1 +1,266 @@
-[]
+[
+  {
+    "id": "heartRate",
+    "label": "Heart rate",
+    "unit": "bpm",
+    "plausible": { "min": 20, "max": 250 },
+    "ttlMinutes": 720,
+    "howTo": [
+      {
+        "step": "Sit or float still and relax for 5 minutes before measuring."
+      },
+      {
+        "step": "Place two fingers (not the thumb) on the inside of your wrist, below the base of the thumb, or use the pulse oximeter or wearable."
+      },
+      {
+        "step": "Count the beats for 30 seconds and multiply by 2, or read the number from the device."
+      },
+      { "step": "Enter the number. Measure at rest, not right after exercise." }
+    ],
+    "why": "In microgravity fluids shift toward the head and the heart works under different conditions. Changes in resting heart rate can reveal dehydration, fever, stress, infection or rhythm problems early.",
+    "thresholds": {
+      "ok": { "min": 50, "max": 100 },
+      "warn": { "min": 40, "max": 120 }
+    },
+    "actions": {
+      "warn": [
+        "Rest for 10 minutes and measure again.",
+        "Drink water and think about fever, stress, caffeine or recent exercise.",
+        "If it stays abnormal on the second measurement, contact the flight surgeon."
+      ],
+      "crit": [
+        "Stop activity and ask a crewmate to stay with you.",
+        "Check breathing and responsiveness. If someone is unresponsive or not breathing, open Emergency Mode.",
+        "Contact the flight surgeon immediately."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  },
+  {
+    "id": "bloodPressure",
+    "label": "Blood pressure",
+    "primaryLabel": "Systolic pressure",
+    "unit": "mmHg",
+    "plausible": { "min": 60, "max": 260 },
+    "ttlMinutes": 1440,
+    "howTo": [
+      {
+        "step": "Rest for 5 minutes. Do not talk, exercise or drink caffeine beforehand."
+      },
+      {
+        "step": "Put the cuff on your bare upper arm at heart level, as shown by the device instructions."
+      },
+      { "step": "Stay still and start the measurement." },
+      {
+        "step": "Enter the top number (systolic) first, then the bottom number (diastolic)."
+      }
+    ],
+    "why": "Blood and body fluids shift toward the upper body in microgravity and blood vessels adapt. Blood pressure shows how the cardiovascular system copes. Compare with your own baseline, not only with Earth norms.",
+    "thresholds": {
+      "ok": { "min": 90, "max": 129 },
+      "warn": { "min": 90, "max": 159 }
+    },
+    "secondary": {
+      "label": "Diastolic pressure",
+      "unit": "mmHg",
+      "plausible": { "min": 30, "max": 160 },
+      "thresholds": {
+        "ok": { "min": 60, "max": 84 },
+        "warn": { "min": 60, "max": 99 }
+      }
+    },
+    "actions": {
+      "warn": [
+        "Rest for 5 minutes and measure again, on the other arm if possible.",
+        "Check hydration and recent caffeine or salty food.",
+        "If the value repeats, tell the flight surgeon."
+      ],
+      "crit": [
+        "Stay still and avoid sudden movements.",
+        "Ask a crewmate to stay with you.",
+        "Contact the flight surgeon immediately. If you have chest pain, confusion or weakness, open Emergency Mode."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  },
+  {
+    "id": "temperature",
+    "label": "Body temperature",
+    "unit": "°C",
+    "plausible": { "min": 30, "max": 43 },
+    "ttlMinutes": 720,
+    "howTo": [
+      {
+        "step": "Wait 15 minutes after exercise, a hot drink or a hot shower."
+      },
+      {
+        "step": "Use the onboard thermometer and follow its instructions (forehead, ear or under the tongue)."
+      },
+      { "step": "Wait for the signal, then read the value." },
+      { "step": "Enter the value in °C." }
+    ],
+    "why": "Fever can signal infection, and spaceflight changes immune function. A cabin is a small closed space where infections spread easily. Low body temperature can mean cold stress or a problem with the thermal environment.",
+    "thresholds": {
+      "ok": { "min": 36.1, "max": 37.5 },
+      "warn": { "min": 35, "max": 38.4 }
+    },
+    "actions": {
+      "warn": [
+        "Rest, drink fluids and measure again in 1 hour.",
+        "Note other symptoms: cough, sore throat, chills, headache.",
+        "Tell the flight surgeon if the temperature stays abnormal."
+      ],
+      "crit": [
+        "Contact the flight surgeon immediately and describe your symptoms.",
+        "Limit contact with crewmates until you get guidance.",
+        "Measure again every hour and keep drinking fluids."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  },
+  {
+    "id": "spo2",
+    "label": "Blood oxygen (SpO2)",
+    "unit": "%",
+    "plausible": { "min": 50, "max": 100 },
+    "ttlMinutes": 720,
+    "howTo": [
+      { "step": "Warm your hands and remove nail polish from the finger." },
+      {
+        "step": "Clip the pulse oximeter on your index finger and keep the hand still."
+      },
+      { "step": "Wait about 30 seconds until the number stops changing." },
+      { "step": "Enter the stable value." }
+    ],
+    "why": "SpO2 shows how well your blood carries oxygen. In a closed spacecraft, low oxygen, high CO2 or poor air quality can lower it. It is one of the fastest signs of a breathing or cabin air problem.",
+    "thresholds": {
+      "ok": { "min": 95, "max": 100 },
+      "warn": { "min": 90, "max": 100 }
+    },
+    "actions": {
+      "warn": [
+        "Take slow deep breaths and measure again after one minute.",
+        "Check the cabin O2 and CO2 readings and ventilation.",
+        "If it stays low, contact the flight surgeon."
+      ],
+      "crit": [
+        "Check cabin air alarms and sit upright. Ask a crewmate to stay with you.",
+        "Contact the flight surgeon immediately.",
+        "If breathing is difficult or lips look blue, open Emergency Mode."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  },
+  {
+    "id": "glucose",
+    "label": "Blood glucose",
+    "unit": "mg/dL",
+    "plausible": { "min": 20, "max": 600 },
+    "ttlMinutes": 1440,
+    "howTo": [
+      { "step": "Measure before eating (fasting) unless told otherwise." },
+      {
+        "step": "Wash and dry your hands. Insert a test strip into the meter."
+      },
+      {
+        "step": "Prick the side of a fingertip with a lancet and touch the blood drop to the strip."
+      },
+      {
+        "step": "Wait for the result and enter it. Put the lancet into the sharps container."
+      }
+    ],
+    "why": "Stress, a changed diet and low activity can affect blood sugar in spaceflight. Very low or very high values cause fatigue and confusion and can be dangerous.",
+    "thresholds": {
+      "ok": { "min": 70, "max": 99 },
+      "warn": { "min": 54, "max": 200 }
+    },
+    "actions": {
+      "warn": [
+        "Check when you last ate and drink water.",
+        "Repeat the fasting measurement tomorrow morning.",
+        "If it stays high or low, tell the flight surgeon."
+      ],
+      "crit": [
+        "If the value is LOW and you are awake and able to swallow, take fast sugar (about 15 g) and measure again after 15 minutes.",
+        "If the value is HIGH, drink water, avoid intense exercise and contact the flight surgeon.",
+        "If you are confused or unresponsive, a crewmate should open Emergency Mode."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  },
+  {
+    "id": "sleep",
+    "label": "Sleep",
+    "unit": "h",
+    "plausible": { "min": 0, "max": 24 },
+    "ttlMinutes": 1440,
+    "howTo": [
+      {
+        "step": "Each morning, check your sleep tracker or sleep log if you have one."
+      },
+      {
+        "step": "Otherwise estimate: the time you fell asleep to the time you woke up, minus long awake periods."
+      },
+      { "step": "Enter the hours you actually slept." }
+    ],
+    "why": "Light cycles, noise, schedules and stress disturb sleep in space. Chronic sleep loss reduces attention, mood, immune function and safety.",
+    "thresholds": {
+      "ok": { "min": 7, "max": 10 },
+      "warn": { "min": 5, "max": 12 }
+    },
+    "actions": {
+      "warn": [
+        "Keep a regular sleep schedule and dim lights in the evening.",
+        "Avoid caffeine and bright screens before sleep.",
+        "Plan protected rest time in the next day."
+      ],
+      "crit": [
+        "Tell the flight surgeon: long sleep loss reduces performance and safety.",
+        "Avoid critical tasks alone and ask a crewmate to double-check your work.",
+        "Ask to swap or postpone demanding tasks if possible."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  },
+  {
+    "id": "mood",
+    "label": "Mood",
+    "unit": "/5",
+    "plausible": { "min": 1, "max": 5 },
+    "ttlMinutes": 1440,
+    "howTo": [
+      {
+        "step": "Pause for a minute and think about how you feel today: energy, stress, motivation."
+      },
+      { "step": "Rate your overall mood from 1 (very low) to 5 (very good)." },
+      {
+        "step": "Answer honestly. There are no wrong answers and it helps you and the flight surgeon notice trends."
+      }
+    ],
+    "why": "Isolation, confinement, distance from Earth and workload affect mental health. Mood changes often appear before other health problems, so a daily check-in helps catch them early.",
+    "thresholds": {
+      "ok": { "min": 4, "max": 5 },
+      "warn": { "min": 3, "max": 5 }
+    },
+    "actions": {
+      "warn": [
+        "Talk to a crewmate about how you feel.",
+        "Plan exercise, rest and a call with family or friends.",
+        "If this lasts several days, tell the flight surgeon or behavioral health support."
+      ],
+      "crit": [
+        "Contact the flight surgeon or behavioral health support on Earth soon. You do not have to handle this alone.",
+        "Tell a crewmate how you feel and stay in contact.",
+        "If you have thoughts of harming yourself, tell a crewmate and contact the ground team immediately."
+      ]
+    },
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  }
+]

@@ -1,1 +1,147 @@
-[]
+[
+  {
+    "id": "iss",
+    "label": "Station (ISS)",
+    "gravityG": 0,
+    "commDelaySecOneWay": 1,
+    "risks": ["radiation", "isolation", "gravity", "closedEnvironment"],
+    "medkit": [
+      "Defibrillator (AED)",
+      "Pulse oximeter",
+      "Blood pressure cuff",
+      "Digital thermometer",
+      "Blood glucose meter",
+      "Basic pain and fever medicine (per flight surgeon)",
+      "Oral rehydration salts"
+    ],
+    "thresholdOverrides": {},
+    "reminders": [
+      { "vital": "heartRate", "everyMinutes": 720 },
+      { "vital": "bloodPressure", "everyMinutes": 1440 },
+      { "vital": "temperature", "everyMinutes": 720 },
+      { "vital": "spo2", "everyMinutes": 720 },
+      { "vital": "glucose", "everyMinutes": 1440 },
+      { "vital": "sleep", "everyMinutes": 1440 },
+      { "vital": "mood", "everyMinutes": 1440 }
+    ]
+  },
+  {
+    "id": "orion",
+    "label": "Orion capsule",
+    "gravityG": 0,
+    "commDelaySecOneWay": 2,
+    "risks": [
+      "radiation",
+      "isolation",
+      "distance",
+      "gravity",
+      "closedEnvironment"
+    ],
+    "medkit": [
+      "Compact defibrillator (AED)",
+      "Pulse oximeter",
+      "Blood pressure cuff",
+      "Digital thermometer",
+      "Basic pain and fever medicine (per flight surgeon)"
+    ],
+    "thresholdOverrides": {
+      "spo2": {
+        "ok": { "min": 95, "max": 100 },
+        "warn": { "min": 92, "max": 100 }
+      }
+    },
+    "reminders": [
+      { "vital": "heartRate", "everyMinutes": 480 },
+      { "vital": "bloodPressure", "everyMinutes": 1440 },
+      { "vital": "temperature", "everyMinutes": 720 },
+      { "vital": "spo2", "everyMinutes": 480 },
+      { "vital": "sleep", "everyMinutes": 1440 },
+      { "vital": "mood", "everyMinutes": 1440 }
+    ]
+  },
+  {
+    "id": "moon-base",
+    "label": "Moon base",
+    "gravityG": 0.16,
+    "commDelaySecOneWay": 2,
+    "risks": [
+      "radiation",
+      "isolation",
+      "distance",
+      "gravity",
+      "closedEnvironment"
+    ],
+    "medkit": [
+      "Defibrillator (AED)",
+      "Pulse oximeter",
+      "Blood pressure cuff",
+      "Digital thermometer",
+      "Blood glucose meter",
+      "Wound care and splint kit",
+      "Basic pain and fever medicine (per flight surgeon)",
+      "Oral rehydration salts"
+    ],
+    "thresholdOverrides": {
+      "spo2": {
+        "ok": { "min": 95, "max": 100 },
+        "warn": { "min": 92, "max": 100 }
+      }
+    },
+    "reminders": [
+      { "vital": "heartRate", "everyMinutes": 480 },
+      { "vital": "bloodPressure", "everyMinutes": 1440 },
+      { "vital": "temperature", "everyMinutes": 720 },
+      { "vital": "spo2", "everyMinutes": 480 },
+      { "vital": "glucose", "everyMinutes": 1440 },
+      { "vital": "sleep", "everyMinutes": 1440 },
+      { "vital": "mood", "everyMinutes": 1440 }
+    ]
+  },
+  {
+    "id": "mars-transit",
+    "label": "Mars transit",
+    "gravityG": 0,
+    "commDelaySecOneWay": 720,
+    "risks": [
+      "radiation",
+      "isolation",
+      "distance",
+      "gravity",
+      "closedEnvironment"
+    ],
+    "medkit": [
+      "Defibrillator (AED)",
+      "Pulse oximeter",
+      "Blood pressure cuff",
+      "Digital thermometer",
+      "Blood glucose meter",
+      "Wound care and splint kit",
+      "Extended medicine supply (per flight surgeon)",
+      "Oral rehydration salts",
+      "Restraint kit for CPR in microgravity"
+    ],
+    "thresholdOverrides": {
+      "heartRate": {
+        "ok": { "min": 50, "max": 95 },
+        "warn": { "min": 40, "max": 115 }
+      },
+      "spo2": {
+        "ok": { "min": 95, "max": 100 },
+        "warn": { "min": 92, "max": 100 }
+      },
+      "temperature": {
+        "ok": { "min": 36.1, "max": 37.3 },
+        "warn": { "min": 35, "max": 38.0 }
+      }
+    },
+    "reminders": [
+      { "vital": "heartRate", "everyMinutes": 360 },
+      { "vital": "bloodPressure", "everyMinutes": 720 },
+      { "vital": "temperature", "everyMinutes": 360 },
+      { "vital": "spo2", "everyMinutes": 360 },
+      { "vital": "glucose", "everyMinutes": 1440 },
+      { "vital": "sleep", "everyMinutes": 1440 },
+      { "vital": "mood", "everyMinutes": 720 }
+    ]
+  }
+]

@@ -27,6 +27,12 @@ import {
   restoreHistory,
   VitalsCharts,
 } from "./vitals/VitalsCharts";
+import { Databank } from "./databank/Databank";
+import { EmergencyPanel } from "./emergency/EmergencyPanel";
+import { HealthScore } from "./gamification/HealthScore";
+import { ExportSummary } from "./groundlink/ExportSummary";
+
+// ----- top bar -----
 
 function TopBar() {
   const mode = usePda((s) => s.mode);
@@ -37,6 +43,9 @@ function TopBar() {
   const openMeasure = useHud((s) => s.openMeasure);
   const closeMeasure = useHud((s) => s.closeMeasure);
   const env = getEnvironment(environment);
+  const sidePanel = useHud((s) => s.sidePanel);
+  const openSide = useHud((s) => s.openSide);
+  const closeSide = useHud((s) => s.closeSide);
 
   return (
     <header className="hud-bar">
@@ -87,6 +96,26 @@ function TopBar() {
             </Button>
             <Button
               size="sm"
+              variant={sidePanel === "databank" ? "primary" : "ghost"}
+              onClick={() =>
+                sidePanel === "databank" ? closeSide() : openSide("databank")
+              }
+            >
+              Databank
+            </Button>
+            <Button
+              size="sm"
+              variant={sidePanel === "groundlink" ? "primary" : "ghost"}
+              onClick={() =>
+                sidePanel === "groundlink"
+                  ? closeSide()
+                  : openSide("groundlink")
+              }
+            >
+              Ground Link
+            </Button>
+            <Button
+              size="sm"
               variant="danger"
               onClick={() => usePda.getState().startEmergency("Manual SOS")}
             >
@@ -98,6 +127,8 @@ function TopBar() {
     </header>
   );
 }
+
+// ----- vitals widgets -----
 
 function VitalCard({ id, label }: { id: VitalId; label: string }) {
   const latest = usePda((s) => s.vitals[id]?.at(-1));
@@ -137,6 +168,8 @@ function VitalsWidgets() {
   );
 }
 
+// ----- alerts -----
+
 function AlertList() {
   const alerts = usePda((s) => s.alerts);
   const dismiss = usePda((s) => s.dismissAlert);
@@ -172,6 +205,8 @@ function AlertList() {
     </Panel>
   );
 }
+
+// ----- zone panel -----
 
 function RelatedVital({ id }: { id: VitalId }) {
   const def = getVitalDef(id);
@@ -230,6 +265,8 @@ function ZonePanel() {
     </Panel>
   );
 }
+
+// ----- demo controls -----
 
 const TIME_SCALES = [
   { value: 1, label: "1× (real time)" },
@@ -369,39 +406,19 @@ function DemoControls() {
   );
 }
 
-function EmergencyPlaceholder() {
-  const log = usePda((s) => s.emergencyLog);
-  return (
-    <div
-      className="emergency-overlay"
-      role="alertdialog"
-      aria-label="Emergency mode"
-    >
-      <h1>⚠ EMERGENCY MODE</h1>
-      <p>Triage is not connected yet (task 3.1).</p>
-      <ul className="mono">
-        {log.slice(-6).map((l) => (
-          <li key={`${l.at}-${l.text}`}>
-            {formatClock(l.at)} {l.text}
-          </li>
-        ))}
-      </ul>
-      <Button size="lg" onClick={() => usePda.getState().endEmergency()}>
-        End emergency
-      </Button>
-    </div>
-  );
-}
+// ----- shell -----
 
 export function Hud() {
   const mode = usePda((s) => s.mode);
   const selectedZone = usePda((s) => s.selectedZone);
   const chartsOpen = useHud((s) => s.chartsOpen);
+  const sidePanel = useHud((s) => s.sidePanel);
 
   useEffect(() => {
     void restoreHistory();
   }, []);
 
+  // Escape closes the open panel
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
@@ -418,17 +435,22 @@ export function Hud() {
       <TopBar />
 
       {mode === "emergency" ? (
-        <EmergencyPlaceholder />
+        <EmergencyPanel />
       ) : (
         <>
           <aside className="hud-left">
             <VitalsWidgets />
+            <HealthScore />
             <AlertList />
             <DemoControls />
           </aside>
 
           <aside className="hud-right">
-            {mode === "measure" ? (
+            {sidePanel === "databank" ? (
+              <Databank />
+            ) : sidePanel === "groundlink" ? (
+              <ExportSummary />
+            ) : mode === "measure" ? (
               <MeasurePanel />
             ) : selectedZone ? (
               <ZonePanel />

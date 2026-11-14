@@ -1,1 +1,179 @@
-{}
+{
+  "start": "check_response",
+  "nodes": {
+    "check_response": {
+      "id": "check_response",
+      "question": "Is the person responding? Tap their shoulder and shout their name.",
+      "voice": "Is the person responding? Tap their shoulder and shout their name.",
+      "options": [
+        { "label": "Yes, responding", "next": "what_problem" },
+        { "label": "No response", "next": "check_breathing" }
+      ],
+      "sources": ["aha-cpr", "nasa-iss-medical"],
+      "unverified": true
+    },
+    "check_breathing": {
+      "id": "check_breathing",
+      "question": "Look at the chest for up to 10 seconds. Is the person breathing normally?",
+      "voice": "Look at the chest for up to ten seconds. Is the person breathing normally?",
+      "options": [
+        { "label": "Yes, breathing normally", "next": "act_recovery" },
+        { "label": "No, or only gasping", "next": "act_cpr" }
+      ],
+      "sources": ["aha-cpr"],
+      "unverified": true
+    },
+    "act_cpr": {
+      "id": "act_cpr",
+      "voice": "Start CPR now. Push hard and fast in time with the beat.",
+      "action": {
+        "title": "Start CPR",
+        "severity": "crit",
+        "cameraTarget": "heart",
+        "metronomeBpm": 110,
+        "steps": [
+          "Shout for help. Ask a crewmate to bring the defibrillator (AED) and the medical kit and to contact the flight surgeon.",
+          "Secure the person and yourself to a fixed surface or restraint, so you can push without drifting away. In microgravity, CPR positions differ from Earth: use the method from your crew training.",
+          "Place the heel of one hand on the centre of the chest and the other hand on top. Keep your arms straight.",
+          "Push hard and fast in time with the metronome: 100 to 120 pushes per minute, about 5 cm (2 in) deep. Let the chest rise fully between pushes.",
+          "If you are trained, give 2 rescue breaths after every 30 pushes. If not, keep pushing without stopping.",
+          "When the defibrillator arrives, switch it on and follow its voice instructions.",
+          "Do not stop until the person moves or breathes normally, the defibrillator tells you to stop, or another crew member takes over."
+        ]
+      },
+      "sources": ["aha-cpr", "nasa-iss-medical"],
+      "unverified": true
+    },
+    "act_recovery": {
+      "id": "act_recovery",
+      "voice": "The person is breathing but not responding. Keep the airway open and watch them closely.",
+      "action": {
+        "title": "Unresponsive but breathing",
+        "severity": "crit",
+        "cameraTarget": "lungs",
+        "steps": [
+          "Secure the person so they cannot drift or hit equipment.",
+          "Keep the head tilted slightly back so the airway stays open. Clear anything visible from the mouth.",
+          "Ask a crewmate to contact the flight surgeon now and to bring the medical kit.",
+          "Check breathing again every minute. If breathing stops or becomes gasping, press Back, answer No, and start CPR.",
+          "Do not give food, drink or medicine."
+        ]
+      },
+      "sources": ["aha-cpr", "nasa-iss-medical"],
+      "unverified": true
+    },
+    "what_problem": {
+      "id": "what_problem",
+      "question": "What is the main problem?",
+      "voice": "What is the main problem?",
+      "options": [
+        { "label": "Chest pain or pressure", "next": "chest_symptoms" },
+        { "label": "Hard to breathe", "next": "act_breathing" },
+        {
+          "label": "Confusion, weakness, drooping face or slurred speech",
+          "next": "act_neuro"
+        },
+        { "label": "Something else or not sure", "next": "act_general" }
+      ],
+      "sources": ["clinical-reference"],
+      "unverified": true
+    },
+    "chest_symptoms": {
+      "id": "chest_symptoms",
+      "question": "Is the chest pain together with sweating, nausea, pain in the arm or jaw, or shortness of breath?",
+      "voice": "Is the chest pain together with sweating, nausea, pain in the arm or jaw, or shortness of breath?",
+      "options": [
+        { "label": "Yes", "next": "act_cardiac" },
+        { "label": "No", "next": "act_chest_watch" }
+      ],
+      "sources": ["clinical-reference"],
+      "unverified": true
+    },
+    "act_cardiac": {
+      "id": "act_cardiac",
+      "voice": "This may be a heart emergency. Keep the person still and contact the flight surgeon now.",
+      "action": {
+        "title": "Possible heart emergency",
+        "severity": "crit",
+        "cameraTarget": "heart",
+        "steps": [
+          "Stop all activity. Keep the person calm and still, and secure them so they do not drift.",
+          "Ask a crewmate to bring the defibrillator and the medical kit and to contact the flight surgeon immediately.",
+          "Ask the flight surgeon whether to give aspirin. Do not give it if the person is allergic or has been told not to take it.",
+          "Measure pulse, blood pressure and SpO2 and tell the flight surgeon the numbers.",
+          "If the person stops responding, press Restart. The guide will lead you to CPR."
+        ]
+      },
+      "sources": ["clinical-reference", "nasa-iss-medical"],
+      "unverified": true
+    },
+    "act_chest_watch": {
+      "id": "act_chest_watch",
+      "voice": "Rest and measure vital signs. Tell the flight surgeon even if the pain goes away.",
+      "action": {
+        "title": "Chest pain without other warning signs",
+        "severity": "warn",
+        "cameraTarget": "heart",
+        "steps": [
+          "Rest and stay with the person.",
+          "Measure pulse, blood pressure and SpO2 (open Measure after you end this guide).",
+          "Tell the flight surgeon about the pain, even if it goes away.",
+          "If new symptoms appear (sweating, nausea, arm or jaw pain, shortness of breath), press Restart and answer again."
+        ]
+      },
+      "sources": ["clinical-reference"],
+      "unverified": true
+    },
+    "act_breathing": {
+      "id": "act_breathing",
+      "voice": "Help the person stay calm. Check the cabin air alarms and measure oxygen.",
+      "action": {
+        "title": "Difficulty breathing",
+        "severity": "crit",
+        "cameraTarget": "lungs",
+        "steps": [
+          "Help the person stay calm and take slow breaths. Keep them secured in a comfortable position.",
+          "Check the cabin alarms for oxygen and CO2 and check that ventilation works.",
+          "Measure SpO2 and tell the flight surgeon the value.",
+          "Contact the flight surgeon immediately and ask about supplemental oxygen.",
+          "If the lips look blue, or the person cannot speak a full sentence, treat it as life-threatening and call all crew for help."
+        ]
+      },
+      "sources": ["nasa-hrp", "clinical-reference"],
+      "unverified": true
+    },
+    "act_neuro": {
+      "id": "act_neuro",
+      "voice": "These can be signs of a stroke. Note the time and contact the flight surgeon immediately.",
+      "action": {
+        "title": "Possible stroke or brain problem",
+        "severity": "crit",
+        "cameraTarget": "brain",
+        "steps": [
+          "Note the time when the symptoms started and tell the flight surgeon.",
+          "Keep the person still and secured. Do not give food, drink or medicine.",
+          "Measure blood glucose if a meter is available, because low glucose can look similar.",
+          "Contact the flight surgeon immediately."
+        ]
+      },
+      "sources": ["clinical-reference"],
+      "unverified": true
+    },
+    "act_general": {
+      "id": "act_general",
+      "voice": "Stay with the person, measure vital signs and contact the flight surgeon.",
+      "action": {
+        "title": "General check",
+        "severity": "warn",
+        "steps": [
+          "Stay with the person and keep them comfortable and secured.",
+          "Measure pulse, blood pressure, temperature and SpO2 (open Measure after you end this guide).",
+          "Contact the flight surgeon and describe what you see.",
+          "If the person gets worse, press Restart and answer again."
+        ]
+      },
+      "sources": ["nasa-iss-medical", "clinical-reference"],
+      "unverified": true
+    }
+  }
+}

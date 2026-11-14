@@ -1,1 +1,81 @@
-[]
+[
+  {
+    "id": "heart",
+    "label": "Heart",
+    "meshNames": ["Heart"],
+    "relatedVitals": ["heartRate", "bloodPressure"],
+    "function": "Pumps blood through the body and delivers oxygen and nutrients to every organ.",
+    "spaceRisks": [
+      "Fluid shifts toward the head in microgravity and change the load on the heart.",
+      "Long-term radiation exposure may raise cardiovascular risk.",
+      "Without regular exercise the heart muscle weakens (cardiovascular deconditioning)."
+    ]
+  },
+  {
+    "id": "brain",
+    "label": "Brain",
+    "meshNames": ["Brain"],
+    "relatedVitals": ["sleep", "mood"],
+    "function": "Controls thinking, mood, sleep and every other system of the body.",
+    "spaceRisks": [
+      "Sleep disruption from light cycles, noise and schedules.",
+      "Isolation, confinement and distance from Earth affect behavioral health.",
+      "Fluid shifts and radiation may affect brain function and vision."
+    ]
+  },
+  {
+    "id": "lungs",
+    "label": "Lungs",
+    "meshNames": ["Lungs"],
+    "relatedVitals": ["spo2"],
+    "function": "Bring oxygen into the blood and remove carbon dioxide.",
+    "spaceRisks": [
+      "Raised CO2 or low O2 in a closed cabin lowers blood oxygen.",
+      "Dust and particles stay airborne in microgravity and irritate the airways."
+    ]
+  },
+  {
+    "id": "bones",
+    "label": "Bones",
+    "meshNames": ["Skeleton"],
+    "relatedVitals": [],
+    "function": "Support the body, protect organs and store calcium.",
+    "spaceRisks": [
+      "Bone density is lost in microgravity without loading and exercise.",
+      "Calcium released from bones can raise the risk of kidney stones."
+    ]
+  },
+  {
+    "id": "muscles",
+    "label": "Muscles",
+    "meshNames": ["Muscles"],
+    "relatedVitals": [],
+    "function": "Produce movement and keep posture and strength.",
+    "spaceRisks": [
+      "Muscles that fight gravity on Earth weaken quickly in space.",
+      "Daily resistance exercise is needed to limit strength loss."
+    ]
+  },
+  {
+    "id": "immune",
+    "label": "Immune system",
+    "meshNames": ["Spleen"],
+    "relatedVitals": ["temperature"],
+    "function": "Defends the body against infections.",
+    "spaceRisks": [
+      "Spaceflight changes immune function and can reactivate dormant viruses.",
+      "Infections spread easily in a small closed cabin."
+    ]
+  },
+  {
+    "id": "metabolism",
+    "label": "Metabolism",
+    "meshNames": ["Liver"],
+    "relatedVitals": ["glucose"],
+    "function": "Turns food into energy and keeps blood sugar in balance.",
+    "spaceRisks": [
+      "Stress, changed diet and low activity can affect blood sugar.",
+      "Inadequate nutrition is one of the risks of long missions."
+    ]
+  }
+]

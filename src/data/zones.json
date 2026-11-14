@@ -1,0 +1,82 @@
+[
+  {
+    "id": "heart",
+    "label": "Heart",
+    "meshNames": ["heart"],
+    "relatedVitals": ["heartRate", "bloodPressure"],
+    "function": "Pumps blood around the body. Your pulse and blood pressure show how hard it is working.",
+    "spaceRisks": [
+      "Fluid shifts toward the head in microgravity and changes blood pressure.",
+      "Without exercise the heart muscle can weaken.",
+      "Long-term radiation exposure may raise cardiovascular risk."
+    ]
+  },
+  {
+    "id": "brain",
+    "label": "Brain",
+    "meshNames": ["brain"],
+    "relatedVitals": ["sleep", "mood"],
+    "function": "Controls thinking, mood, sleep and every other organ.",
+    "spaceRisks": [
+      "Disturbed sleep and day/night rhythm reduce alertness.",
+      "Isolation and confinement can cause anxiety and irritability.",
+      "High CO2 in closed spaces can cause headache and drowsiness."
+    ]
+  },
+  {
+    "id": "lungs",
+    "label": "Lungs",
+    "meshNames": ["lung_left", "lung_right"],
+    "relatedVitals": ["spo2"],
+    "function": "Bring oxygen into the blood. Blood oxygen (SpO2) shows how well that works.",
+    "spaceRisks": [
+      "Cabin air quality and CO2 level affect breathing.",
+      "Dust particles behave differently in low gravity.",
+      "Low SpO2 can be an early sign of a serious problem."
+    ]
+  },
+  {
+    "id": "bones",
+    "label": "Bones",
+    "meshNames": ["skeleton"],
+    "relatedVitals": [],
+    "function": "Support the body and store calcium.",
+    "spaceRisks": [
+      "Bone density drops without the load of gravity.",
+      "Regular resistance exercise is needed to slow the loss."
+    ]
+  },
+  {
+    "id": "muscles",
+    "label": "Muscles",
+    "meshNames": ["muscles"],
+    "relatedVitals": [],
+    "function": "Move the body and keep posture.",
+    "spaceRisks": [
+      "Muscles weaken quickly when they do not work against gravity.",
+      "Daily exercise is part of the mission schedule."
+    ]
+  },
+  {
+    "id": "immune",
+    "label": "Immune system",
+    "meshNames": ["spleen", "thymus"],
+    "relatedVitals": ["temperature"],
+    "function": "Defends the body against infection. Body temperature is a simple sign of its activity.",
+    "spaceRisks": [
+      "Stress, radiation and disturbed sleep can change immune response.",
+      "A fever far from Earth needs attention early."
+    ]
+  },
+  {
+    "id": "metabolism",
+    "label": "Metabolism",
+    "meshNames": ["liver", "pancreas", "stomach"],
+    "relatedVitals": ["glucose"],
+    "function": "Turns food into energy. Blood glucose shows how well the body handles it.",
+    "spaceRisks": [
+      "Changes in diet, activity and sleep can shift blood sugar.",
+      "Reduced appetite is common in the first days of spaceflight."
+    ]
+  }
+]

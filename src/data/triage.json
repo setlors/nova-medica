@@ -1,0 +1,20 @@
+
+{
+  "start": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "action": {
+        "title": "Placeholder",
+        "steps": [
+          "Temporary placeholder. Await medically reviewed triage instructions."
+        ],
+        "severity": "unknown"
+      },
+      "sources": [
+        "TODO"
+      ],
+      "unverified": true
+    }
+  }
+}

@@ -1,0 +1,165 @@
+[
+  {
+    "id": "heartRate",
+    "label": "Heart rate",
+    "unit": "bpm",
+    "plausible": { "min": 20, "max": 250 },
+    "ttlMinutes": 60,
+    "howTo": [
+      { "step": "Measure your pulse while resting." },
+      { "step": "Count beats for 60 seconds or use a heart-rate sensor." }
+    ],
+    "why": "Heart rate is used by the demo to track cardiovascular changes.",
+    "thresholds": {
+      "ok": { "min": 50, "max": 100 },
+      "warn": { "min": 40, "max": 120 }
+    },
+    "actions": {
+      "warn": ["Repeat the measurement and review the trend."],
+      "crit": ["Repeat the measurement and seek professional medical assessment."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  },
+  {
+    "id": "bloodPressure",
+    "label": "Blood pressure",
+    "primaryLabel": "Systolic pressure",
+    "unit": "mmHg",
+    "plausible": { "min": 60, "max": 260 },
+    "ttlMinutes": 240,
+    "howTo": [
+      { "step": "Sit quietly before measuring." },
+      { "step": "Use a suitable blood pressure cuff." },
+      { "step": "Record systolic and diastolic values." }
+    ],
+    "why": "Blood pressure readings are used by the demo to track cardiovascular changes.",
+    "thresholds": {
+      "ok": { "min": 90, "max": 129 },
+      "warn": { "min": 80, "max": 159 }
+    },
+    "secondary": {
+      "label": "Diastolic pressure",
+      "unit": "mmHg",
+      "plausible": { "min": 30, "max": 160 },
+      "thresholds": {
+        "ok": { "min": 60, "max": 85 },
+        "warn": { "min": 50, "max": 100 }
+      }
+    },
+    "actions": {
+      "warn": ["Repeat the measurement after resting."],
+      "crit": ["Repeat the measurement and seek professional medical assessment."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  },
+  {
+    "id": "temperature",
+    "label": "Body temperature",
+    "unit": "°C",
+    "plausible": { "min": 30, "max": 43 },
+    "ttlMinutes": 120,
+    "howTo": [
+      { "step": "Measure temperature using a suitable thermometer." },
+      { "step": "Record the value and measurement time." }
+    ],
+    "why": "Temperature is used by the demo to track changes over time.",
+    "thresholds": {
+      "ok": { "min": 36.1, "max": 37.5 },
+      "warn": { "min": 35, "max": 38.5 }
+    },
+    "actions": {
+      "warn": ["Repeat the measurement and review other symptoms."],
+      "crit": ["Repeat the measurement and seek professional medical assessment."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  },
+  {
+    "id": "spo2",
+    "label": "Blood oxygen saturation",
+    "unit": "%",
+    "plausible": { "min": 50, "max": 100 },
+    "ttlMinutes": 60,
+    "howTo": [
+      { "step": "Place the pulse oximeter correctly on a finger." },
+      { "step": "Wait for a stable reading." }
+    ],
+    "why": "Oxygen saturation is used by the demo to track respiratory status.",
+    "thresholds": {
+      "ok": { "min": 94, "max": 100 },
+      "warn": { "min": 90, "max": 100 }
+    },
+    "actions": {
+      "warn": ["Repeat the measurement and check the sensor placement."],
+      "crit": ["Repeat the measurement and seek urgent professional medical assessment."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  },
+  {
+    "id": "glucose",
+    "label": "Blood glucose",
+    "unit": "mg/dL",
+    "plausible": { "min": 20, "max": 600 },
+    "ttlMinutes": 240,
+    "howTo": [
+      { "step": "Use an appropriate glucose meter." },
+      { "step": "Record the result and whether it was taken before or after a meal." }
+    ],
+    "why": "Glucose is used by the demo to track metabolic changes.",
+    "thresholds": {
+      "ok": { "min": 70, "max": 140 },
+      "warn": { "min": 50, "max": 200 }
+    },
+    "actions": {
+      "warn": ["Repeat the measurement and review the context of the reading."],
+      "crit": ["Repeat the measurement and seek professional medical assessment."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  },
+  {
+    "id": "sleep",
+    "label": "Sleep duration",
+    "unit": "h",
+    "plausible": { "min": 0, "max": 24 },
+    "ttlMinutes": 1440,
+    "howTo": [
+      { "step": "Record the number of hours slept during the previous sleep period." }
+    ],
+    "why": "Sleep duration is used by the demo to track rest and recovery.",
+    "thresholds": {
+      "ok": { "min": 7, "max": 10 },
+      "warn": { "min": 5, "max": 12 }
+    },
+    "actions": {
+      "warn": ["Review your sleep schedule and allow time for rest."],
+      "crit": ["Review your rest schedule and consider discussing persistent sleep problems with a professional."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  },
+  {
+    "id": "mood",
+    "label": "Mood",
+    "unit": "/5",
+    "plausible": { "min": 1, "max": 5 },
+    "ttlMinutes": 1440,
+    "howTo": [
+      { "step": "Rate your current mood from 1 to 5." }
+    ],
+    "why": "Mood is used by the demo to track self-reported wellbeing.",
+    "thresholds": {
+      "ok": { "min": 3, "max": 5 },
+      "warn": { "min": 2, "max": 5 }
+    },
+    "actions": {
+      "warn": ["Consider taking a break and talking with a crewmate."],
+      "crit": ["Consider seeking support from a qualified professional."]
+    },
+    "sources": ["TODO"],
+    "unverified": true
+  }
+]

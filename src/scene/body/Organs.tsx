@@ -14,6 +14,22 @@ const PULSE_AMP = 0.15;
 
 const OPACITY: Partial<Record<ZoneId, number>> = { bones: 0.85, muscles: 0.3 };
 
+// Hand and foot layout (same numbers as in HoloBody.tsx)
+const FINGERS = [
+  { z: 0.027, len: 0.075 },
+  { z: 0.009, len: 0.085 },
+  { z: -0.009, len: 0.078 },
+  { z: -0.027, len: 0.062 },
+];
+const THUMB: V3[] = [[0, -0.02, 0.028], [-0.008, -0.05, 0.05], [-0.014, -0.082, 0.062], [-0.016, -0.105, 0.07]];
+const TOES = [
+  { x: -0.025, z: 0.195 },
+  { x: -0.008, z: 0.19 },
+  { x: 0.007, z: 0.183 },
+  { x: 0.021, z: 0.175 },
+  { x: 0.034, z: 0.165 },
+];
+
 type Builder = (m: MeshStandardMaterial, w: MeshBasicMaterial) => ReactNode;
 
 // ── helpers ──────────────────────────────────────────────────────────
@@ -69,8 +85,9 @@ function Heart({ m }: { m: MeshStandardMaterial }) {
 }
 
 // ── skeleton ─────────────────────────────────────────────────────────
+// Spine curve (y -> z), from the skull base down to the pelvis
 const SPINE_Z: [number, number][] = [
-  [1.53, -0.04], [1.42, -0.06], [1.3, -0.085], [1.18, -0.082], [1.06, -0.06], [0.95, -0.068], [0.88, -0.075],
+  [1.62, -0.022], [1.53, -0.04], [1.42, -0.06], [1.3, -0.085], [1.18, -0.082], [1.06, -0.06], [0.95, -0.068], [0.88, -0.075],
 ];
 function spineZ(y: number) {
   for (let i = 0; i < SPINE_Z.length - 1; i++) {
@@ -81,39 +98,36 @@ function spineZ(y: number) {
   return SPINE_Z[SPINE_Z.length - 1]![1];
 }
 const VERT = (() => {
-  const out: { y: number; z: number; r: number }[] = [];
-  const add = (n: number, y0: number, step: number, r0: number, r1: number) => {
+  const out: { y: number; z: number; r: number; h: number }[] = [];
+  const add = (n: number, y0: number, step: number, r0: number, r1: number, h: number) => {
     for (let i = 0; i < n; i++) {
       const y = y0 - i * step;
-      out.push({ y, z: spineZ(y), r: r0 + ((r1 - r0) * i) / (n - 1) });
+      out.push({ y, z: spineZ(y), r: r0 + ((r1 - r0) * i) / (n - 1), h });
     }
   };
-  add(7, 1.52, 0.02, 0.009, 0.012); // cervical
-  add(12, 1.38, 0.018, 0.013, 0.019); // thoracic
-  add(5, 1.155, 0.026, 0.021, 0.024); // lumbar
+  add(7, 1.6, 0.02, 0.009, 0.012, 0.014); // cervical: reaches the skull base
+  add(12, 1.46, 0.019, 0.013, 0.019, 0.015); // thoracic
+  add(5, 1.225, 0.04, 0.021, 0.024, 0.026); // lumbar: reaches the sacrum
   return out;
 })();
+
+// Left-side arm landmarks (mirrored); they follow ARM_PTS of the skin in HoloBody.tsx
+const SHOULDER: V3 = [0.288, 1.45, 0];
+const ELBOW: V3 = [0.31, 1.18, -0.004];
+const WRIST: V3 = [0.334, 0.915, 0.03];
 
 function Skeleton({ m, w }: { m: MeshStandardMaterial; w: MeshBasicMaterial }) {
   return (
     <group name="skeleton">
-      {/* skull: wireframe cranium so the brain stays visible */}
-      <mesh raycast={noRaycast} material={w} position={[0, 1.7, -0.005]}>
-        <sphereGeometry args={[0.105, 18, 12]} />
-      </mesh>
+      {/* skull: wireframe cranium so the brain stays visible, plus solid face bones */}
       <mesh material={m} geometry={G.jaw()} />
       <mesh material={m} geometry={G.maxilla()} />
-      {SIDES.map((s) => (
-        <mesh key={s} material={m} position={[s * 0.035, 1.69, 0.097]}>
-          <torusGeometry args={[0.016, 0.0035, 8, 20]} />
-        </mesh>
-      ))}
 
       {/* spine */}
       {VERT.map((v, i) => (
         <group key={i} position={[0, v.y, v.z]}>
           <mesh material={m} scale={[v.r, 1, v.r]}>
-            <cylinderGeometry args={[1, 1, 0.014, 10]} />
+            <cylinderGeometry args={[1, 1, v.h, 10]} />
           </mesh>
           <mesh material={m} position={[0, -0.003, -(v.r + 0.01)]}>
             <boxGeometry args={[0.005, 0.005, 0.022]} />
@@ -129,38 +143,54 @@ function Skeleton({ m, w }: { m: MeshStandardMaterial; w: MeshBasicMaterial }) {
           ))}
         </Fragment>
       ))}
-      <mesh material={m} position={[0, 1.41, 0.103]}>
+      {/* sternum: manubrium, body, xiphoid */}
+      <mesh material={m} position={[0, 1.43, 0.1]}>
         <boxGeometry args={[0.04, 0.05, 0.01]} />
       </mesh>
-      <mesh material={m} position={[0, 1.3, 0.103]}>
+      <mesh material={m} position={[0, 1.3, 0.1]}>
         <boxGeometry args={[0.028, 0.17, 0.009]} />
       </mesh>
-      <mesh material={m} position={[0, 1.2, 0.103]} rotation={[Math.PI, 0, 0]}>
+      <mesh material={m} position={[0, 1.19, 0.1]} rotation={[Math.PI, 0, 0]}>
         <coneGeometry args={[0.008, 0.025, 4]} />
       </mesh>
 
       {/* shoulder girdle and arms */}
-      {SIDES.map((s) => (
-        <group key={s}>
-          <mesh material={m} geometry={G.clavicle(s)} />
-          <mesh material={m} geometry={G.scapula()} position={[s * 0.12, 1.37, -0.095]} rotation={[0.15, -s * 0.3, s * 0.4]} />
-          <Bone m={m} pts={[[s * 0.3, 1.45, 0], [s * 0.3, 1.22, 0]]} r={0.0095} knob={1.6} />
-          <Bone m={m} pts={[[s * 0.3, 1.2, 0.008], [s * 0.3, 0.975, 0.01]]} r={0.0055} knob={1.5} />
-          <Bone m={m} pts={[[s * 0.3, 1.2, -0.008], [s * 0.3, 0.97, -0.01]]} r={0.0058} knob={1.5} />
-          {[0, 1, 2, 3, 4].map((f) => (
-            <Bone
-              key={f}
-              m={m}
-              pts={[[s * 0.3, 0.975, 0], [s * 0.3 + (f - 2) * 0.006, 0.93, 0], [s * 0.3 + (f - 2) * 0.012, 0.875, 0]]}
-              r={0.0035}
-              knob={1.3}
-            />
-          ))}
-        </group>
-      ))}
+      {SIDES.map((s) => {
+        const sh: V3 = [s * SHOULDER[0], SHOULDER[1], SHOULDER[2]];
+        const el: V3 = [s * ELBOW[0], ELBOW[1], ELBOW[2]];
+        const wr: V3 = [s * WRIST[0], WRIST[1], WRIST[2]];
+        return (
+          <group key={s}>
+            <mesh material={m} geometry={G.clavicle(s)} />
+            <mesh material={m} geometry={G.scapula()} position={[s * 0.12, 1.37, -0.095]} rotation={[0.15, -s * 0.3, s * 0.4]} />
+            {/* humerus */}
+            <Bone m={m} pts={[sh, el]} r={0.0095} knob={1.6} />
+            {/* radius and ulna */}
+            <Bone m={m} pts={[[el[0], el[1] - 0.01, el[2] + 0.008], [wr[0], wr[1], wr[2] + 0.006]]} r={0.0055} knob={1.5} />
+            <Bone m={m} pts={[[el[0], el[1] - 0.01, el[2] - 0.008], [wr[0], wr[1], wr[2] - 0.006]]} r={0.0058} knob={1.5} />
+            {/* hand: metacarpals + finger bones + thumb, same layout as the skin */}
+            {FINGERS.map((f, i) => (
+              <Fragment key={i}>
+                <Bone m={m} pts={[[wr[0], wr[1] - 0.01, wr[2] + f.z * 0.6], [wr[0], wr[1] - 0.09, wr[2] + f.z]]} r={0.004} knob={1.2} />
+                <Bone
+                  m={m}
+                  pts={[
+                    [wr[0], wr[1] - 0.09, wr[2] + f.z],
+                    [wr[0] + s * -0.003, wr[1] - 0.09 - f.len * 0.5, wr[2] + f.z + 0.004],
+                    [wr[0] + s * -0.011, wr[1] - 0.09 - f.len, wr[2] + f.z + 0.012],
+                  ]}
+                  r={0.0032}
+                  knob={1.3}
+                />
+              </Fragment>
+            ))}
+            <Bone m={m} pts={THUMB.map((p) => [wr[0] + s * p[0], wr[1] + p[1], wr[2] + p[2]] as V3)} r={0.0045} knob={1.3} />
+          </group>
+        );
+      })}
 
       {/* pelvis */}
-      <mesh material={m} geometry={G.sacrum()} position={[0, 0.985, -0.07]} />
+      <mesh material={m} geometry={G.sacrum()} position={[0, 1.0, -0.07]} />
       <mesh material={m} position={[0, 0.9, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.75, 1]}>
         <torusGeometry args={[0.1, 0.007, 8, 32]} />
       </mesh>
@@ -171,13 +201,21 @@ function Skeleton({ m, w }: { m: MeshStandardMaterial; w: MeshBasicMaterial }) {
       {/* legs */}
       {SIDES.map((s) => (
         <group key={s}>
-          <Bone m={m} pts={[[s * 0.1, 0.885, 0], [s * 0.122, 0.85, 0], [s * 0.115, 0.67, 0.005], [s * 0.1, 0.485, 0.01]]} r={0.011} knob={1.5} />
-          <mesh material={m} position={[s * 0.1, 0.47, 0.032]} scale={[1, 1.1, 0.5]}>
+          <Bone m={m} pts={[[s * 0.1, 0.885, 0], [s * 0.118, 0.85, 0], [s * 0.112, 0.67, 0.005], [s * 0.098, 0.485, 0.01]]} r={0.011} knob={1.5} />
+          <mesh material={m} position={[s * 0.098, 0.47, 0.032]} scale={[1, 1.1, 0.5]}>
             <sphereGeometry args={[0.014, 12, 8]} />
           </mesh>
-          <Bone m={m} pts={[[s * 0.1, 0.455, 0.005], [s * 0.1, 0.08, 0]]} r={0.0095} knob={1.4} />
-          <Bone m={m} pts={[[s * 0.112, 0.44, -0.012], [s * 0.112, 0.085, -0.012]]} r={0.0045} knob={1.4} />
-          <Bone m={m} pts={[[s * 0.1, 0.06, -0.035], [s * 0.1, 0.035, 0.03], [s * 0.1, 0.022, 0.1]]} r={0.012} knob={1} />
+          <Bone m={m} pts={[[s * 0.097, 0.455, 0.005], [s * 0.092, 0.08, 0]]} r={0.0095} knob={1.4} />
+          <Bone m={m} pts={[[s * 0.108, 0.44, -0.012], [s * 0.104, 0.085, -0.012]]} r={0.0045} knob={1.4} />
+          {/* foot: heel, arch, five metatarsals, toes */}
+          <Bone m={m} pts={[[s * 0.09, 0.068, 0], [s * 0.09, 0.012, -0.04]]} r={0.011} knob={1.3} />
+          <Bone m={m} pts={[[s * 0.09, 0.055, 0.01], [s * 0.09, 0.03, 0.07]]} r={0.009} knob={1.2} />
+          {TOES.map((t, i) => (
+            <Fragment key={i}>
+              <Bone m={m} pts={[[s * 0.09, 0.03, 0.07], [s * (0.09 + t.x * 0.8), 0.016, 0.145]]} r={0.0045} knob={1.2} />
+              <Bone m={m} pts={[[s * (0.09 + t.x * 0.8), 0.016, 0.145], [s * (0.09 + t.x), 0.013, t.z]]} r={0.0035} knob={1.3} />
+            </Fragment>
+          ))}
         </group>
       ))}
     </group>
@@ -189,30 +227,33 @@ function Muscles({ m }: { m: MeshStandardMaterial }) {
   return (
     <group name="muscles">
       {/* back */}
-      <mesh material={m} geometry={memo('back', () => G.scapula().clone().scale(2.8, 2.5, 3))} position={[0, 1.3, -0.104]} />
+      <mesh material={m} geometry={memo('back', () => G.scapula().clone().scale(2.8, 2.5, 3))} position={[0, 1.3, -0.098]} />
       {/* abs */}
       {[1.18, 1.12, 1.06, 1.0].map((y) =>
         [-0.028, 0.028].map((x) => (
-          <mesh key={`${y}${x}`} material={m} position={[x, y, 0.115]}>
-            <sphereGeometry args={[0.024, 14, 10]} />
+          <mesh key={`${y}${x}`} material={m} position={[x, y, 0.09]}>
+            <sphereGeometry args={[0.022, 14, 10]} />
           </mesh>
         )),
       )}
       {SIDES.map((s) => (
         <group key={s}>
-          <mesh material={m} position={[s * 0.08, 1.36, 0.098]} rotation={[0, 0, -s * 0.35]} scale={[0.075, 0.05, 0.022]}>
+          {/* pectoral */}
+          <mesh material={m} position={[s * 0.08, 1.36, 0.094]} rotation={[0, 0, -s * 0.35]} scale={[0.075, 0.05, 0.022]}>
             <sphereGeometry args={[1, 20, 14]} />
           </mesh>
-          <mesh material={m} position={[s * 0.3, 1.42, 0]} scale={[0.04, 0.05, 0.04]}>
+          {/* shoulder, upper arm, forearm */}
+          <mesh material={m} position={[s * 0.292, 1.42, 0]} scale={[0.04, 0.05, 0.04]}>
             <sphereGeometry args={[1, 18, 14]} />
           </mesh>
-          <Spindle m={m} a={[s * 0.3, 1.4, 0.012]} b={[s * 0.3, 1.22, 0.01]} r={0.036} />
-          <Spindle m={m} a={[s * 0.3, 1.19, 0]} b={[s * 0.3, 0.93, 0]} r={0.034} peak={0.6} />
+          <Spindle m={m} a={[s * 0.296, 1.4, 0.012]} b={[s * 0.308, 1.2, 0.006]} r={0.034} />
+          <Spindle m={m} a={[s * 0.312, 1.17, 0.004]} b={[s * 0.333, 0.93, 0.028]} r={0.032} peak={0.6} />
+          {/* glute, thigh, calf */}
           <mesh material={m} position={[s * 0.09, 0.9, -0.08]} scale={[0.06, 0.06, 0.04]}>
             <sphereGeometry args={[1, 18, 14]} />
           </mesh>
-          <Spindle m={m} a={[s * 0.1, 0.88, 0.015]} b={[s * 0.1, 0.5, 0.015]} r={0.075} peak={0.9} />
-          <Spindle m={m} a={[s * 0.1, 0.45, -0.015]} b={[s * 0.1, 0.1, -0.01]} r={0.06} peak={0.65} />
+          <Spindle m={m} a={[s * 0.1, 0.88, 0.015]} b={[s * 0.098, 0.5, 0.015]} r={0.075} peak={0.9} />
+          <Spindle m={m} a={[s * 0.095, 0.45, -0.015]} b={[s * 0.092, 0.1, -0.01]} r={0.06} peak={0.65} />
         </group>
       ))}
     </group>
@@ -254,8 +295,8 @@ const BUILDERS: Record<string, Builder> = {
   ),
   liver: (m) => (
     <group name="liver">
-      <mesh material={m} geometry={G.liver()} position={[-0.1, 1.12, 0.04]} />
-      <mesh material={m} geometry={G.gallbladder()} position={[-0.07, 1.075, 0.07]} rotation={[0, 0, 0.3]} />
+      <mesh material={m} geometry={G.liver()} position={[-0.085, 1.12, 0.04]} />
+      <mesh material={m} geometry={G.gallbladder()} position={[-0.062, 1.075, 0.07]} rotation={[0, 0, 0.3]} />
     </group>
   ),
   stomach: (m) => (
@@ -281,6 +322,7 @@ export function Organs() {
             transparent: true,
             opacity: OPACITY[z.id] ?? 0.6,
             depthWrite: false,
+            depthTest: false,
             roughness: 0.4,
           }),
         ]),
@@ -292,8 +334,7 @@ export function Organs() {
       Object.fromEntries(
         zones.map((z) => [
           z.id,
-          new MeshBasicMaterial({ transparent: true, opacity: 0.35, wireframe: true, depthWrite: false }),
-        ]),
+            new MeshBasicMaterial({ transparent: true, opacity: 0.15, wireframe: true, depthWrite: false, depthTest: false }),        ]),
       ) as Record<ZoneId, MeshBasicMaterial>,
     [],
   );

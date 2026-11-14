@@ -1,4 +1,5 @@
-import { BufferGeometry, CatmullRomCurve3, SphereGeometry, TubeGeometry, Vector3 } from 'three';
+import { BufferGeometry, CatmullRomCurve3, SphereGeometry, TorusGeometry, TubeGeometry, Vector3 } from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 export type V3 = [number, number, number];
 type Shape = (p: Vector3, u: Vector3) => void;
@@ -95,9 +96,9 @@ export function tube(
   return g;
 }
 
-// Brain folds: layered sines give a wrinkly surface
+// Brain folds: layered sines give a wrinkly surface (softer than before)
 const fold = (x: number, y: number, z: number) => {
-  const f = 190;
+  const f = 130;
   const a = Math.sin(x * f + 1.6 * Math.sin(y * f * 0.8));
   const b = Math.sin(y * f * 1.1 + 1.6 * Math.sin(z * f * 0.9));
   const c = Math.sin(z * f + 1.6 * Math.sin(x * f * 0.7));
@@ -130,8 +131,9 @@ const lung = (left: boolean) =>
     32,
   );
 
-const RIB_Y = [1.44, 1.4, 1.36, 1.32, 1.28, 1.24, 1.2];
-const RIB_A = [0.15, 0.17, 0.185, 0.2, 0.2, 0.195, 0.18];
+// 10 ribs; the lower ones are shorter so the cage tapers inside the torso
+const RIB_Y = [1.46, 1.43, 1.4, 1.37, 1.34, 1.31, 1.28, 1.25, 1.22, 1.19];
+const RIB_A = [0.14, 0.165, 0.18, 0.19, 0.195, 0.195, 0.19, 0.18, 0.17, 0.155];
 
 const BRONCHI: (() => BufferGeometry)[] = [
   () => tube([[0, 1.405, -0.015], [0.03, 1.385, -0.015], [0.06, 1.355, -0.012], [0.085, 1.31, -0.01]], (t) => 0.008 - 0.003 * t, 20, 8),
@@ -143,14 +145,14 @@ const BRONCHI: (() => BufferGeometry)[] = [
 export const G = {
   // ── brain ──
   hemisphere: () =>
-    memo('hemi', () =>
+    memo('hemi2', () =>
       blob(
         0.04,
         0.062,
         0.085,
         (p, u) => {
           p.x *= 1 - 0.12 * Math.max(0, u.z);
-          p.addScaledVector(u, 0.0035 * fold(p.x, p.y, p.z));
+          p.addScaledVector(u, 0.0022 * fold(p.x, p.y, p.z));
           p.x = Math.max(p.x, -0.034);
         },
         80,
@@ -202,9 +204,9 @@ export const G = {
 
   // ── metabolism ──
   liver: () =>
-    memo('liver', () =>
+    memo('liver2', () =>
       blob(
-        0.105,
+        0.095,
         0.058,
         0.07,
         (p, u) => {
@@ -268,12 +270,51 @@ export const G = {
     ),
 
   // ── skeleton ──
-  jaw: () =>
-    memo('jaw', () =>
-      tube([[-0.062, 1.67, 0], [-0.058, 1.625, 0.035], [-0.035, 1.605, 0.075], [0, 1.598, 0.088], [0.035, 1.605, 0.075], [0.058, 1.625, 0.035], [0.062, 1.67, 0]], 0.0065, 28, 8),
+  // cranium: flat base, sloped forehead, fuller back. Drawn as a wireframe so the brain stays visible.
+  // Place at [0, 1.722, -0.006].
+  cranium: () =>
+    memo('cranium', () =>
+      blob(
+        0.082,
+        0.078,
+        0.104,
+        (p, u) => {
+          const lo = Math.max(0, -u.y);
+          p.x *= 1 - 0.22 * lo; // base narrows
+          p.z *= 1 - 0.12 * lo;
+          if (u.z > 0 && u.y > 0) p.z *= 1 - 0.06 * u.y; // forehead slopes back
+        },
+        26,
+        16,
+      ),
     ),
+  // mandible: chin, body, angle and the ramus rising to the joint in front of the ear
+  jaw: () =>
+    memo('jaw2', () =>
+      tube(
+        [
+          [-0.068, 1.688, -0.012], [-0.062, 1.628, -0.004], [-0.05, 1.608, 0.04],
+          [-0.028, 1.598, 0.072], [0, 1.595, 0.082], [0.028, 1.598, 0.072],
+          [0.05, 1.608, 0.04], [0.062, 1.628, -0.004], [0.068, 1.688, -0.012],
+        ],
+        0.006,
+        48,
+        8,
+      ),
+    ),
+  // face bones in one merged mesh: upper jaw, two eye sockets, cheekbone arches, nose bridge
   maxilla: () =>
-    memo('maxilla', () => tube([[-0.05, 1.655, 0.07], [-0.025, 1.645, 0.098], [0.025, 1.645, 0.098], [0.05, 1.655, 0.07]], 0.006, 16, 8)),
+    memo('face2', () => {
+      const parts: BufferGeometry[] = [
+        tube([[-0.05, 1.652, 0.062], [-0.025, 1.645, 0.086], [0.025, 1.645, 0.086], [0.05, 1.652, 0.062]], 0.006, 16, 8),
+        tube([[0, 1.712, 0.092], [0, 1.68, 0.098]], 0.004, 6, 6),
+      ];
+      for (const s of [-1, 1]) {
+        parts.push(new TorusGeometry(0.017, 0.003, 6, 20).translate(s * 0.038, 1.705, 0.09));
+        parts.push(tube([[s * 0.04, 1.668, 0.085], [s * 0.062, 1.668, 0.045], [s * 0.074, 1.675, 0]], 0.004, 14, 6));
+      }
+      return mergeGeometries(parts)!;
+    }),
   ribCount: RIB_Y.length,
   rib: (i: number, s: -1 | 1) =>
     memo(`rib:${i}:${s}`, () => {

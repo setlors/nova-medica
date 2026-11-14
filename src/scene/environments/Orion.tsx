@@ -1,27 +1,35 @@
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
+import { AdditiveBlending, BackSide, type Group } from 'three';
+
+const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function Orion() {
+  const earth = useRef<Group>(null);
+  useFrame((_, dt) => {
+    if (earth.current && !reduce()) earth.current.rotation.y += dt * 0.03;
+  });
   return (
     <>
-      <color attach="background" args={['#050f16']} />
-      <Stars radius={30} depth={20} count={500} factor={2} fade />
-      <group position={[0, 1, 0]}>
-        {/* capsule cabin: a big wireframe cone and cylinder around the body */}
-        <mesh position={[0, 0.9, 0]}>
-          <coneGeometry args={[3.2, 1.8, 24, 3, true]} />
-          <meshBasicMaterial color="#3de0ff" transparent opacity={0.16} wireframe />
+      <color attach="background" args={['#050d16']} />
+      <Stars radius={40} depth={20} count={800} factor={2} fade />
+      <group ref={earth} position={[-4, 2.5, -14]}>
+        <mesh>
+          <sphereGeometry args={[3, 32, 24]} />
+          <meshBasicMaterial color="#1b5f96" />
         </mesh>
-        <mesh position={[0, -0.6, 0]}>
-          <cylinderGeometry args={[3.2, 3.2, 1.4, 24, 3, true]} />
-          <meshBasicMaterial color="#0b5a70" transparent opacity={0.22} wireframe />
+        <mesh>
+          <sphereGeometry args={[3.2, 32, 24]} />
+          <meshBasicMaterial color="#3de0ff" transparent opacity={0.14} blending={AdditiveBlending} side={BackSide} />
         </mesh>
-        {[-1, 1].map((s) => (
-          <mesh key={s} position={[s * 3.18, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-            <circleGeometry args={[0.35, 24]} />
-            <meshBasicMaterial color="#3de0ff" transparent opacity={0.25} />
-          </mesh>
-        ))}
       </group>
+      {Array.from({ length: 6 }, (_, i) => (
+        <mesh key={i} position={[0, 1.1, -2 - i * 1.4]}>
+          <torusGeometry args={[3.2 - i * 0.15, 0.04, 6, 48]} />
+          <meshBasicMaterial color="#3de0ff" transparent opacity={0.22} />
+        </mesh>
+      ))}
     </>
   );
 }

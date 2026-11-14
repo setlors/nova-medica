@@ -1,63 +1,60 @@
+import * as T from 'three';
+import type { Status } from '../../core/types';
 
-import {
-  AdditiveBlending,
-  DoubleSide,
-  ShaderMaterial,
-} from 'three';
-
-export const STATUS_COLOR: Record<string, string> = {
-  normal: '#2ee6a6',
-  ok: '#2ee6a6',
-  warning: '#ffb020',
-  caution: '#ffb020',
-  critical: '#ff3b4a',
-  alert: '#ff3b4a',
-  unknown: '#6b7a8c',
-  offline: '#6b7a8c',
+// Status colours = the spec tokens --ok, --warn, --crit, --unknown
+export const STATUS_COLOR: Record<Status, string> = {
+  ok: '#4dffb0',
+  warn: '#ffb347',
+  crit: '#ff4d5e',
+  unknown: '#6b7f8a',
 };
 
-export function createHologramMaterial(): ShaderMaterial {
-  return new ShaderMaterial({
+const HOLO_VERT = /* glsl */ `
+  varying vec3 vNormal;
+  varying vec3 vView;
+  varying float vY;
+  void main() {
+    vec4 wp = modelMatrix * vec4(position, 1.0);
+    vec4 mv = viewMatrix * wp;
+    vNormal = normalize(normalMatrix * normal);
+    vView = normalize(-mv.xyz);
+    vY = wp.y;
+    gl_Position = projectionMatrix * mv;
+  }
+`;
+
+const HOLO_FRAG = /* glsl */ `
+  uniform float uTime;
+  uniform float uScanY;
+  uniform float uOpacity;
+  uniform vec3 uColor;
+  varying vec3 vNormal;
+  varying vec3 vView;
+  varying float vY;
+  void main() {
+    float fres = pow(1.0 - abs(dot(normalize(vNormal), normalize(vView))), 2.5);
+    float lines = 0.92 + 0.08 * sin(vY * 90.0 - uTime * 2.0);
+    float beam = exp(-pow((vY - uScanY) * 18.0, 2.0));
+    float a = (fres * 0.9 + 0.08 + beam * 0.8) * lines * uOpacity * 2.0;
+    gl_FragColor = vec4(uColor + beam * 0.6, clamp(a, 0.0, 1.0));
+  }
+`;
+
+// Fresnel hologram. ScanBeam.tsx animates uTime and uScanY,
+// HoloBody.tsx changes uColor (red in Emergency).
+export function createHologramMaterial(color = '#3de0ff'): T.ShaderMaterial {
+  return new T.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: T.FrontSide,
+    blending: T.AdditiveBlending,
     uniforms: {
       uTime: { value: 0 },
-      uScanY: { value: -10 },
+      uScanY: { value: 0 },
+      uOpacity: { value: 0.3 },
+      uColor: { value: new T.Color(color) },
     },
-    vertexShader: `
-      varying vec3 vPosition;
-
-      void main() {
-        vPosition = position;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform float uTime;
-      uniform float uScanY;
-
-      varying vec3 vPosition;
-
-      void main() {
-        float scan = 1.0 - smoothstep(
-          0.0,
-          0.035,
-          abs(vPosition.y - uScanY)
-        );
-
-        float pulse = 0.88 + 0.12 * sin(uTime * 2.0);
-        float lines = 0.94 + 0.06 * sin(vPosition.y * 180.0);
-
-        vec3 baseColor = vec3(0.10, 0.85, 0.95);
-        vec3 scanColor = vec3(0.55, 1.0, 1.0);
-
-        vec3 color = mix(baseColor, scanColor, scan);
-        float alpha = (0.32 + scan * 0.45) * pulse * lines;
-
-        gl_FragColor = vec4(color, alpha);
-      }
-    `,
-    transparent: true,
-    blending: AdditiveBlending,
-    side: DoubleSide,
-    depthWrite: false,
+    vertexShader: HOLO_VERT,
+    fragmentShader: HOLO_FRAG,
   });
 }

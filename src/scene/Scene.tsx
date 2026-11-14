@@ -1,13 +1,22 @@
-import { useRef, useState, type ComponentRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ComponentRef, type ComponentType, type ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { usePda } from "../core/store";
-import envJson from '../data/environments.json';
+import { initSoundEvents } from '../ui/sounds';
 import zonesJson from '../data/zones.json';
-import type { EnvironmentId, Scenario, Status, Zone, ZoneId } from '../core/types';
+import {
+  ENVIRONMENT_IDS,
+  type EnvironmentId,
+  type Scenario,
+  type Status,
+  type Zone,
+  type ZoneId,
+} from '../core/types';
 import { CameraRig } from './camera/CameraRig';
 import { HoloBody } from './body/HoloBody';
 import { STATUS_COLOR } from './body/shaders';
+import { CprGuide } from './emergency3d/CprGuide';
+import { EmergencyCamera } from './emergency3d/EmergencyCamera';
 import { MarsTransit } from './environments/MarsTransit';
 import { MoonBase } from './environments/MoonBase';
 import { Orion } from './environments/Orion';
@@ -15,19 +24,22 @@ import { Station } from './environments/Station';
 import { Effects } from './fx/Effects';
 
 const zones = zonesJson as unknown as Zone[];
-const envs = envJson as unknown as { id: EnvironmentId }[];
 const DEBUG = new URLSearchParams(window.location.search).has('debug');
 const STATUSES: Status[] = ['ok', 'warn', 'crit', 'unknown'];
 const SCENARIOS: Scenario[] = ['normal', 'slowDrift', 'collapse'];
 const TARGETS: (ZoneId | 'overview')[] = ['overview', ...zones.map((z) => z.id)];
 
-// Matches by name, so it works whatever the other environment ids are
+// One scene per environment id (ids come from core/types.ts)
+const ENV_SCENES: Record<EnvironmentId, ComponentType> = {
+  iss: Station,
+  orion: Orion,
+  'moon-base': MoonBase,
+  'mars-transit': MarsTransit,
+};
+
 function Env() {
-  const id = String(usePda((s) => s.environment));
-  if (id.includes('mars')) return <MarsTransit />;
-  if (id.includes('moon') || id.includes('lunar')) return <MoonBase />;
-  if (id.includes('orion')) return <Orion />;
-  return <Station />;
+  const Active = ENV_SCENES[usePda((s) => s.environment)];
+  return <Active />;
 }
 
 function Chip(p: { on?: boolean; color?: string; onClick: () => void; children: ReactNode }) {
@@ -50,8 +62,15 @@ function Chip(p: { on?: boolean; color?: string; onClick: () => void; children: 
   );
 }
 
+type DebugProps = {
+  low: boolean;
+  setLow: (v: boolean) => void;
+  cpr: number | null;
+  setCpr: (v: number | null) => void;
+};
+
 // ?debug only: lets scene work without the HUD
-function DebugPanel({ low, setLow }: { low: boolean; setLow: (v: boolean) => void }) {
+function DebugPanel({ low, setLow, cpr, setCpr }: DebugProps) {
   const [open, setOpen] = useState(true);
   const [msg, setMsg] = useState('');
   const zoneStatus = usePda((s) => s.zoneStatus);
@@ -100,8 +119,8 @@ function DebugPanel({ low, setLow }: { low: boolean; setLow: (v: boolean) => voi
           ))}
 
           <H>Environment</H>
-          {envs.map((e) => (
-            <Chip key={e.id} on={environment === e.id} onClick={() => usePda.getState().setEnvironment(e.id)}>{e.id}</Chip>
+          {ENVIRONMENT_IDS.map((id) => (
+            <Chip key={id} on={environment === id} onClick={() => usePda.getState().setEnvironment(id)}>{id}</Chip>
           ))}
 
           <H>Heart rate (real evaluate path)</H>
@@ -116,6 +135,14 @@ function DebugPanel({ low, setLow }: { low: boolean; setLow: (v: boolean) => voi
           <H>Mode: {mode}</H>
           <Chip onClick={() => usePda.getState().startEmergency('debug')}>SOS</Chip>
           <Chip onClick={() => usePda.getState().endEmergency()}>end SOS</Chip>
+
+          <H>CPR guide (bpm)</H>
+          <Chip on={cpr === null} onClick={() => setCpr(null)}>off</Chip>
+          <Chip on={cpr === 100} onClick={() => setCpr(100)}>100</Chip>
+          <Chip on={cpr === 110} onClick={() => setCpr(110)}>110</Chip>
+          <Chip on={cpr === 120} onClick={() => setCpr(120)}>120</Chip>
+
+          <H>Graphics</H>
           <Chip on={low} onClick={() => setLow(!low)}>low graphics</Chip>
         </>
       )}
@@ -124,8 +151,11 @@ function DebugPanel({ low, setLow }: { low: boolean; setLow: (v: boolean) => voi
 }
 
 export function Scene() {
+  useEffect(() => initSoundEvents(), []);
   const controls = useRef<ComponentRef<typeof OrbitControls>>(null);
   const [low, setLow] = useState(false);
+  // TODO: when the store has metronomeBpm, replace with: usePda((s) => s.metronomeBpm)
+  const [cprBpm, setCprBpm] = useState<number | null>(null);
 
   return (
     <>
@@ -140,6 +170,7 @@ export function Scene() {
 
         <Env />
         <HoloBody />
+        <CprGuide bpm={cprBpm} />
         <gridHelper args={[6, 24, '#3de0ff', '#0b3a4a']} />
 
         <OrbitControls
@@ -151,9 +182,10 @@ export function Scene() {
           maxPolarAngle={Math.PI * 0.55}
         />
         <CameraRig controls={controls} />
+        <EmergencyCamera />
         <Effects low={low} />
       </Canvas>
-      {DEBUG && <DebugPanel low={low} setLow={setLow} />}
+      {DEBUG && <DebugPanel low={low} setLow={setLow} cpr={cprBpm} setCpr={setCprBpm} />}
     </>
   );
 }

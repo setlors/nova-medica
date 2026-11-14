@@ -1,29 +1,36 @@
-import { Stars } from '@react-three/drei';
+import { Sparkles, Stars } from '@react-three/drei';
 
-const CRATERS: [number, number, number][] = [
-  [-3, -2.5, 0.7], [2.8, -3.2, 0.5], [4, 1.5, 0.9], [-4.5, 2.5, 0.6], [0.5, -5, 0.8], [-1.5, 4.8, 0.5],
+const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// [x, z, size]: fixed, so the scene looks the same every time
+const ROCKS: [number, number, number][] = [
+  [-5, -3, 0.5], [4, -5, 0.7], [6, 2, 0.4], [-6, 4, 0.6], [2, -7, 0.9], [-3, -8, 0.5], [0, 7, 0.4],
 ];
 
 export function MoonBase() {
   return (
     <>
-      <color attach="background" args={['#05080c']} />
-      <Stars radius={40} depth={20} count={900} factor={2.5} fade />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
-        <circleGeometry args={[12, 48]} />
-        <meshBasicMaterial color="#1b2a33" transparent opacity={0.8} />
+      <color attach="background" args={['#02060a']} />
+      <Stars radius={45} depth={20} count={900} factor={2.2} fade />
+      <mesh position={[7, 5, -16]}>
+        <sphereGeometry args={[1.4, 28, 20]} />
+        <meshBasicMaterial color="#2b7fc2" />
       </mesh>
-      {CRATERS.map(([x, z, r], i) => (
-        <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[x, 0, z]}>
-          <ringGeometry args={[r * 0.8, r, 32]} />
-          <meshBasicMaterial color="#3de0ff" transparent opacity={0.3} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.03, 0]}>
+        <circleGeometry args={[14, 48]} />
+        <meshStandardMaterial color="#1a2630" roughness={1} />
+      </mesh>
+      {ROCKS.map(([x, z, s], i) => (
+        <mesh key={i} position={[x, s * 0.3, z]} scale={s}>
+          <icosahedronGeometry args={[1, 0]} />
+          <meshStandardMaterial color="#243440" roughness={1} flatShading />
         </mesh>
       ))}
-      {/* habitat dome */}
-      <mesh position={[0, 0, -6]}>
-        <sphereGeometry args={[2, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshBasicMaterial color="#3de0ff" transparent opacity={0.18} wireframe />
+      <mesh>
+        <sphereGeometry args={[9, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshBasicMaterial color="#0b5a70" wireframe transparent opacity={0.18} />
       </mesh>
+      <Sparkles count={40} scale={[10, 3, 10]} size={1.5} speed={reduce() ? 0 : 0.1} opacity={0.4} color="#9fb4c0" position={[0, 1.2, 0]} />
     </>
   );
 }

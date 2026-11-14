@@ -30,15 +30,15 @@ type Props = {
 
 export function Effects({ low = false }: Props) {
   const reduced = useReducedMotion();
-  const aberration = useMemo(() => new Vector2(0.0008, 0.0012), []);
+  const aberration = useMemo(() => new Vector2(0.0005, 0.0008), []);
 
   if (low) return null;
 
   return (
-    <EffectComposer multisampling={0} enableNormalPass={false}>
+    <EffectComposer multisampling={4} enableNormalPass={false}>
       <Bloom
-        intensity={0.9}
-        luminanceThreshold={0.18}
+        intensity={0.8}
+        luminanceThreshold={0.3}
         luminanceSmoothing={0.35}
         mipmapBlur
         radius={0.7}
@@ -49,10 +49,8 @@ export function Effects({ low = false }: Props) {
         modulationOffset={0.35}
         blendFunction={BlendFunction.NORMAL}
       />
-      {reduced ? (
-        <Vignette eskil={false} offset={0.25} darkness={0.55} />
-      ) : (
-        <Scanline blendFunction={BlendFunction.OVERLAY} density={1.4} opacity={0.18} />
+      {!reduced && (
+        <Scanline blendFunction={BlendFunction.OVERLAY} density={1.0} opacity={0.1} />
       )}
       <Vignette eskil={false} offset={0.25} darkness={0.55} />
     </EffectComposer>

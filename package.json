@@ -16,6 +16,8 @@
   "devDependencies": {
     "@gltf-transform/cli": "^4.5.1",
     "@types/bun": "^1.4.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@types/three": "^0.187.0",
     "@vitejs/plugin-react": "^6.3.0",
     "prettier": "^3.10.1",
@@ -28,6 +30,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "typecheck": "bun check"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
   }
 }

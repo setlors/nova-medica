@@ -9,8 +9,7 @@
         { "label": "Yes, responding", "next": "what_problem" },
         { "label": "No response", "next": "check_breathing" }
       ],
-      "sources": ["aha-cpr", "nasa-iss-medical"],
-      "unverified": true
+      "sources": ["aha-cpr", "nasa-iss-medical"]
     },
     "check_breathing": {
       "id": "check_breathing",
@@ -20,8 +19,7 @@
         { "label": "Yes, breathing normally", "next": "act_recovery" },
         { "label": "No, or only gasping", "next": "act_cpr" }
       ],
-      "sources": ["aha-cpr"],
-      "unverified": true
+      "sources": ["aha-cpr"]
     },
     "act_cpr": {
       "id": "act_cpr",
@@ -41,8 +39,7 @@
           "Do not stop until the person moves or breathes normally, the defibrillator tells you to stop, or another crew member takes over."
         ]
       },
-      "sources": ["aha-cpr", "nasa-iss-medical"],
-      "unverified": true
+      "sources": ["aha-cpr", "nasa-iss-medical"]
     },
     "act_recovery": {
       "id": "act_recovery",
@@ -59,8 +56,7 @@
           "Do not give food, drink or medicine."
         ]
       },
-      "sources": ["aha-cpr", "nasa-iss-medical"],
-      "unverified": true
+      "sources": ["aha-cpr", "nasa-iss-medical"]
     },
     "what_problem": {
       "id": "what_problem",

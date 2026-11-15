@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { FormEvent } from "react";
+import type { SubmitEvent } from "react";
 import { getEnvironment, getVitalDef, vitalDefs } from "../../core/content";
 import { usePda } from "../../core/store";
 import type { Evaluation, VitalId } from "../../core/types";
@@ -44,7 +44,7 @@ export function MeasureWizard({
   const t = environment?.thresholdOverrides[vitalId] ?? def.thresholds;
   const stepNumber = stage === "guide" ? 1 : stage === "input" ? 2 : 3;
 
-  function submit(e: FormEvent) {
+  function submit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!def) return;
     const p = parseNumber(primary);
@@ -113,11 +113,6 @@ export function MeasureWizard({
             range the status is critical.
           </p>
 
-          {def.unverified && (
-            <p className="note">
-              Unverified text: it has not yet been checked against its source.
-            </p>
-          )}
           <Button block size="lg" onClick={() => setStage("input")}>
             I'm ready, enter the value
           </Button>

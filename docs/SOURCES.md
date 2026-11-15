@@ -4,12 +4,6 @@ Every threshold, instruction and triage step in `src/data/*.json` must point to
 a key from this table. The test `src/core/content.test.ts` fails if a key used
 in the JSON is missing here.
 
-Rules for this file:
-
-- The first column is the key, written in backticks.
-- Keys are unique.
-- Text in JSON that is not yet checked against its source is marked `unverified: true`.
-
 | Key                  | Title                                                                            | Link                                                                       | Used for                                                                     |
 | -------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | `nasa-hrp`           | NASA Human Research Program, Human Research Roadmap                              | https://humanresearchroadmap.nasa.gov/                                     | Five hazards of spaceflight, `why` texts in vitals.json, Databank entries    |

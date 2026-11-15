@@ -82,8 +82,7 @@
         "Contact the flight surgeon immediately. If you have chest pain, confusion or weakness, open Emergency Mode."
       ]
     },
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   },
   {
     "id": "temperature",
@@ -118,8 +117,7 @@
         "Measure again every hour and keep drinking fluids."
       ]
     },
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   },
   {
     "id": "spo2",
@@ -152,8 +150,7 @@
         "If breathing is difficult or lips look blue, open Emergency Mode."
       ]
     },
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   },
   {
     "id": "glucose",
@@ -190,8 +187,7 @@
         "If you are confused or unresponsive, a crewmate should open Emergency Mode."
       ]
     },
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   },
   {
     "id": "sleep",
@@ -225,8 +221,7 @@
         "Ask to swap or postpone demanding tasks if possible."
       ]
     },
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   },
   {
     "id": "mood",
@@ -260,7 +255,6 @@
         "If you have thoughts of harming yourself, tell a crewmate and contact the ground team immediately."
       ]
     },
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   }
 ]

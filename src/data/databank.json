@@ -1,1 +1,120 @@
-[]
+[
+  {
+    "id": "radiation",
+    "title": "Space radiation",
+    "category": "hazard",
+    "summary": "Outside the protection of Earth's atmosphere and magnetic field, crews receive more radiation than on the ground.",
+    "details": [
+      "Two main sources: galactic cosmic rays (constant, high energy) and solar particle events (sudden bursts from the Sun).",
+      "Long-term concerns studied by NASA include cancer risk and effects on the central nervous system and the cardiovascular system.",
+      "Protection comes from shielding, storm shelters inside the spacecraft, monitoring and limiting exposure time.",
+      "NOVA MEDICA cannot measure radiation. It only helps you notice general health changes."
+    ],
+    "relatedVitals": ["heartRate", "bloodPressure"],
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "isolation",
+    "title": "Isolation and confinement",
+    "category": "hazard",
+    "summary": "A small crew in a small space for months affects mood, sleep and teamwork.",
+    "details": [
+      "Typical effects are anxiety, irritability, low motivation and poor sleep.",
+      "Mood often changes before other health problems appear, so a daily check-in is useful.",
+      "Helpful habits: regular schedule, exercise, private time, contact with family and friends, honest talk with crewmates."
+    ],
+    "relatedVitals": ["mood", "sleep"],
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "distance",
+    "title": "Distance from Earth",
+    "category": "hazard",
+    "summary": "On the way to Mars, help from Earth is slow and a quick return is impossible.",
+    "details": [
+      "Radio signals to Mars take up to about 20 minutes one way, so a live conversation with a doctor is not possible.",
+      "Crews must be able to act on their own: clear instructions, a stocked medical kit and offline tools.",
+      "This is why NOVA MEDICA works without internet and prepares a summary for the doctor on Earth."
+    ],
+    "relatedVitals": [],
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "gravity",
+    "title": "Altered gravity",
+    "category": "hazard",
+    "summary": "Microgravity and low-gravity environments change how the body works.",
+    "details": [
+      "Body fluids shift toward the head: facial puffiness, pressure changes and possible vision changes.",
+      "Without regular exercise, bones and muscles lose strength.",
+      "The heart and blood vessels adapt, and some people feel dizzy when gravity returns.",
+      "Daily exercise is part of the crew's routine for this reason."
+    ],
+    "relatedVitals": ["bloodPressure", "heartRate"],
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "closedEnvironment",
+    "title": "Hostile and closed environment",
+    "category": "hazard",
+    "summary": "Air, water, noise and microbes in a sealed spacecraft all affect health.",
+    "details": [
+      "Raised CO2 can cause headache and sleepiness, and poor air quality can lower SpO2.",
+      "Germs spread easily in a small shared space.",
+      "Noise, light cycles and temperature also affect sleep and mood.",
+      "Cabin air alarms are the first thing to check if several crew members feel unwell."
+    ],
+    "relatedVitals": ["spo2", "temperature"],
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "bone-loss",
+    "title": "Bone and muscle loss",
+    "category": "condition",
+    "summary": "Without gravity loading, bones and muscles weaken during long missions.",
+    "details": [
+      "Weight-bearing bones can lose density at a rate of around one percent per month in microgravity.",
+      "Resistance and aerobic exercise, nutrition and medical monitoring reduce the loss.",
+      "Recovery after return takes time and is not always complete."
+    ],
+    "relatedVitals": [],
+    "unlockedBy": "gravity",
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "immune",
+    "title": "Immune system changes",
+    "category": "condition",
+    "summary": "Stress, radiation, disturbed sleep and confinement can change how the immune system responds.",
+    "details": [
+      "Crews sometimes show dormant viruses becoming active again and changes in immune cells.",
+      "A fever is a reason to measure again, rest and tell the flight surgeon.",
+      "Good sleep, nutrition and hygiene help."
+    ],
+    "relatedVitals": ["temperature"],
+    "unlockedBy": "closedEnvironment",
+    "sources": ["nasa-hrp"],
+    "unverified": true
+  },
+  {
+    "id": "cardiovascular",
+    "title": "Cardiovascular changes",
+    "category": "condition",
+    "summary": "The heart and blood vessels adapt to spaceflight, and long-term radiation exposure may add risk.",
+    "details": [
+      "Resting heart rate and blood pressure can shift because fluids move toward the upper body.",
+      "Compare your values with your own baseline, not only with Earth norms.",
+      "Chest pain, fainting or a very fast or slow pulse need urgent medical advice."
+    ],
+    "relatedVitals": ["heartRate", "bloodPressure"],
+    "unlockedBy": "gravity",
+    "sources": ["nasa-hrp", "clinical-reference"],
+    "unverified": true
+  }
+]

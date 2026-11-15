@@ -56,9 +56,7 @@ function useMetronome(bpm: number | undefined, muted: boolean) {
         osc.connect(gain).connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + 0.09);
-      } catch {
-        // audio unavailable. the visual metronome still works
-      }
+      } catch {}
     };
     tick();
     const id = setInterval(tick, 60_000 / bpm);
@@ -76,22 +74,45 @@ function useMetronome(bpm: number | undefined, muted: boolean) {
   return beat;
 }
 
-function useVoice(text: string | undefined, enabled: boolean) {
+function speakWithSynthesis(text: string) {
+  if (!("speechSynthesis" in window)) return;
+  try {
+    const voice = window.speechSynthesis
+      .getVoices()
+      .find((v) => v.localService && v.lang.startsWith("en"));
+    if (!voice && !navigator.onLine) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-US";
+    u.rate = 0.95;
+    if (voice) u.voice = voice;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  } catch {}
+}
+
+function useVoice(nodeId: string, text: string | undefined, enabled: boolean) {
   useEffect(() => {
-    if (!enabled || !text || !("speechSynthesis" in window)) return;
-    try {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "en-US";
-      u.rate = 0.95;
-      window.speechSynthesis.speak(u);
-    } catch {}
+    if (!enabled || !text) return;
+    let cancelled = false;
+    let fellBack = false;
+    const fallback = () => {
+      if (cancelled || fellBack) return;
+      fellBack = true;
+      speakWithSynthesis(text);
+    };
+
+    const audio = new Audio(`/audio/voice/${nodeId}.wav`);
+    audio.onerror = fallback;
+    audio.play().catch(fallback);
+
     return () => {
+      cancelled = true;
+      audio.pause();
       try {
-        window.speechSynthesis.cancel();
+        window.speechSynthesis?.cancel();
       } catch {}
     };
-  }, [text, enabled]);
+  }, [nodeId, text, enabled]);
 }
 
 export function EmergencyPanel() {
@@ -115,7 +136,7 @@ export function EmergencyPanel() {
   const spoken = action
     ? (node.voice ?? `${action.title}. ${action.steps.join(" ")}`)
     : (node.voice ?? node.question);
-  useVoice(spoken, voiceOn);
+  useVoice(node.id, spoken, voiceOn);
 
   // camera flies to the zone of the protocol
   useEffect(() => {

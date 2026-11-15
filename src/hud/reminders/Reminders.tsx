@@ -7,6 +7,7 @@ import { useHud } from "../hudStore";
 
 const MIN = 60_000;
 const SNOOZE_MIN = 10;
+const SNOOZE_MIN_REAL_MS = 60_000;
 
 export interface DueReminder {
   vital: VitalId;
@@ -29,6 +30,21 @@ function same(a: DueReminder[], b: DueReminder[]) {
         x.vital === b[i]?.vital && x.overdueMinutes === b[i]?.overdueMinutes,
     )
   );
+}
+
+function snoozeDuration(timeScale: number) {
+  return Math.max(
+    SNOOZE_MIN * MIN,
+    SNOOZE_MIN_REAL_MS * Math.max(1, timeScale),
+  );
+}
+
+function formatOverdue(min: number) {
+  if (min < 1) return "Due now";
+  if (min < 120) return `Overdue by ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 48) return `Overdue by ${h} h`;
+  return `Overdue by ${Math.floor(h / 24)} days`;
 }
 
 export function useDueReminders() {
@@ -55,6 +71,11 @@ export function useDueReminders() {
         });
       }
     }
+    // most overdue first, so the order stays stable between checks
+    next.sort(
+      (a, b) =>
+        b.overdueMinutes - a.overdueMinutes || a.vital.localeCompare(b.vital),
+    );
     setDue((prev) => (same(prev, next) ? prev : next));
   }, []);
 
@@ -65,11 +86,12 @@ export function useDueReminders() {
   }, [check, environment]);
 
   const snooze = useCallback(
-    (vital: VitalId) => {
-      snoozedUntil.current.set(
-        vital,
-        usePda.getState().getNow() + SNOOZE_MIN * MIN,
-      );
+    (vitals: VitalId | VitalId[]) => {
+      const s = usePda.getState();
+      const until = s.getNow() + snoozeDuration(s.timeScale);
+      for (const v of Array.isArray(vitals) ? vitals : [vitals]) {
+        snoozedUntil.current.set(v, until);
+      }
       check();
     },
     [check],
@@ -84,26 +106,53 @@ export function Reminders() {
 
   return (
     <div className="toasts" aria-live="polite" aria-relevant="additions">
-      {due.slice(0, 3).map((r) => (
-        <div key={r.vital} className="toast" role="status">
+      {due.length === 1 && due[0] && (
+        <div className="toast" role="status">
           <div>
-            <strong>Time to measure: {r.label}</strong>
-            <div className="muted">
-              {r.overdueMinutes < 1
-                ? "Due now"
-                : `Overdue by ${r.overdueMinutes} min`}
-            </div>
+            <strong>Time to measure: {due[0].label}</strong>
+            <div className="muted">{formatOverdue(due[0].overdueMinutes)}</div>
           </div>
           <div className="row">
-            <Button size="sm" onClick={() => openMeasure(r.vital)}>
+            <Button size="sm" onClick={() => openMeasure(due[0]!.vital)}>
               Measure
             </Button>
-            <Button size="sm" variant="ghost" onClick={() => snooze(r.vital)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => snooze(due[0]!.vital)}
+            >
               Later
             </Button>
           </div>
         </div>
-      ))}
+      )}
+
+      {due.length > 1 && (
+        <div className="toast" role="status">
+          <div>
+            <strong>{due.length} measurements due</strong>
+            <div className="muted">
+              {due
+                .slice(0, 3)
+                .map((r) => r.label)
+                .join(", ")}
+              {due.length > 3 ? ` +${due.length - 3} more` : ""}
+            </div>
+          </div>
+          <div className="row">
+            <Button size="sm" onClick={() => openMeasure()}>
+              Measure
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => snooze(due.map((r) => r.vital))}
+            >
+              Later
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

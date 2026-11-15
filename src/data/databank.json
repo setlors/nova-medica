@@ -11,8 +11,7 @@
       "NOVA MEDICA cannot measure radiation. It only helps you notice general health changes."
     ],
     "relatedVitals": ["heartRate", "bloodPressure"],
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "isolation",
@@ -25,8 +24,7 @@
       "Helpful habits: regular schedule, exercise, private time, contact with family and friends, honest talk with crewmates."
     ],
     "relatedVitals": ["mood", "sleep"],
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "distance",
@@ -39,8 +37,7 @@
       "This is why NOVA MEDICA works without internet and prepares a summary for the doctor on Earth."
     ],
     "relatedVitals": [],
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "gravity",
@@ -54,8 +51,7 @@
       "Daily exercise is part of the crew's routine for this reason."
     ],
     "relatedVitals": ["bloodPressure", "heartRate"],
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "closedEnvironment",
@@ -69,8 +65,7 @@
       "Cabin air alarms are the first thing to check if several crew members feel unwell."
     ],
     "relatedVitals": ["spo2", "temperature"],
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "bone-loss",
@@ -84,8 +79,7 @@
     ],
     "relatedVitals": [],
     "unlockedBy": "gravity",
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "immune",
@@ -99,8 +93,7 @@
     ],
     "relatedVitals": ["temperature"],
     "unlockedBy": "closedEnvironment",
-    "sources": ["nasa-hrp"],
-    "unverified": true
+    "sources": ["nasa-hrp"]
   },
   {
     "id": "cardiovascular",
@@ -114,7 +107,6 @@
     ],
     "relatedVitals": ["heartRate", "bloodPressure"],
     "unlockedBy": "gravity",
-    "sources": ["nasa-hrp", "clinical-reference"],
-    "unverified": true
+    "sources": ["nasa-hrp", "clinical-reference"]
   }
 ]

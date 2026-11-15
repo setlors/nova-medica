@@ -206,8 +206,7 @@ export const usePda = create<PdaState>()((set, get) => ({
       const existing = alerts.find((a) => a.id === alarmId);
       const snoozeOver =
         existing?.acknowledged === true &&
-        now - (existing.acknowledgedAt ?? 0) >= ALARM_SNOOZE_MS;
-
+        Date.now() - (existing.acknowledgedAt ?? 0) >= ALARM_SNOOZE_MS;
       if (breach && (!existing || snoozeOver)) {
         const label = getVitalDef(reading.id)?.label ?? reading.id;
         const text = `Automatic alarm: ${label} ${reading.value} ${reading.unit}.`;
@@ -326,11 +325,7 @@ export const usePda = create<PdaState>()((set, get) => ({
     set((state) => ({
       alerts: state.alerts.map((a) =>
         a.id === id
-          ? {
-              ...a,
-              acknowledged: true,
-              acknowledgedAt: state.simClock ?? Date.now(),
-            }
+          ? { ...a, acknowledged: true, acknowledgedAt: Date.now() }
           : a,
       ),
     })),
@@ -355,11 +350,7 @@ export const usePda = create<PdaState>()((set, get) => ({
       cameraTarget: "overview",
       alerts: state.alerts.map((a) =>
         a.id.startsWith("alarm:")
-          ? {
-              ...a,
-              acknowledged: true,
-              acknowledgedAt: state.simClock ?? Date.now(),
-            }
+          ? { ...a, acknowledged: true, acknowledgedAt: Date.now() }
           : a,
       ),
       emergencyLog: [

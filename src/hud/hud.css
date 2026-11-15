@@ -630,31 +630,96 @@
   list-style: none;
   padding-left: 0;
 }
-.bar-actions select.input {
+/* ----- select (all select.input: top bar, Ground Link, Demo controls) ----- */
+select.input {
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
+  font: inherit;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--text);
   background-color: rgba(4, 18, 26, 0.85);
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%233de0ff' stroke-width='2'/></svg>");
   background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding: 7px 32px 7px 12px;
+  background-position: right 12px center;
+  padding: 8px 36px 8px 12px;
   border: 1px solid var(--holo);
+  border-radius: 0;
   transition:
     box-shadow 0.15s,
     background-color 0.15s;
 }
-.bar-actions select.input:hover,
-.bar-actions select.input:focus-visible {
-  box-shadow: 0 0 14px rgba(61, 224, 255, 0.4);
+select.input:hover,
+select.input:focus-visible {
+  box-shadow: 0 0 14px rgba(var(--holo-rgb, 61, 224, 255), 0.4);
   background-color: rgba(8, 40, 56, 0.9);
 }
-.bar-actions select.input option {
+/* top bar: smaller */
+.bar-actions select.input {
+  width: auto;
+  font-size: 14px;
+  padding: 6px 34px 6px 12px;
+}
+
+/* fallback list (Firefox, Safari, older Chrome) */
+select.input option {
   background: #04121a;
   color: var(--text);
+}
+select.input option:checked {
+  background: #0b3b4d linear-gradient(#0b3b4d, #0b3b4d);
+  color: var(--holo);
+}
+
+/* fully styled list (Chrome / Edge 135+) */
+@supports (appearance: base-select) {
+  select.input,
+  select.input::picker(select) {
+    appearance: base-select;
+  }
+  select.input {
+    background-image: none;
+    padding: 8px 12px;
+  }
+  .bar-actions select.input {
+    padding: 6px 12px;
+  }
+  select.input::picker-icon {
+    color: var(--holo);
+    transition: rotate 0.15s;
+  }
+  select.input:open::picker-icon {
+    rotate: 180deg;
+  }
+  select.input::picker(select) {
+    background: rgba(4, 18, 26, 0.96);
+    border: 1px solid var(--holo);
+    border-radius: 0;
+    padding: 4px;
+    margin-top: 4px;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 0 16px rgba(var(--holo-rgb, 61, 224, 255), 0.2);
+  }
+  select.input option {
+    font: inherit;
+    padding: 10px 12px;
+    border-left: 3px solid transparent;
+    transition: background 0.12s;
+  }
+  select.input option:hover,
+  select.input option:focus-visible {
+    background: rgba(var(--holo-rgb, 61, 224, 255), 0.18);
+  }
+  select.input option:checked {
+    background: rgba(var(--holo-rgb, 61, 224, 255), 0.25);
+    border-left-color: var(--holo);
+    color: var(--holo);
+  }
+  select.input option::checkmark {
+    display: none;
+  }
 }
 /* ----- small screens ----- */
 @media (max-width: 900px) {

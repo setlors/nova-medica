@@ -5,9 +5,9 @@
   font-weight: 600;
   font-display: swap;
   src: url("/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
-    U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "Barlow Condensed";
@@ -21,9 +21,9 @@
   font-weight: 700;
   font-display: swap;
   src: url("/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
-    U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "Barlow Condensed";
@@ -37,9 +37,9 @@
   font-weight: 400;
   font-display: swap;
   src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF,
-    U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "IBM Plex Mono";
@@ -54,7 +54,8 @@
   --bg: #04121a;
   --panel: rgba(7, 28, 39, 0.82);
   --holo: #3de0ff;
-  --holo-rgb: 61, 224, 255; /* для rgba(var(--holo-rgb), α) — працює і в emergency */
+  --holo-rgb:
+    61, 224, 255; /* для rgba(var(--holo-rgb), α) — працює і в emergency */
   --ok: #4dffb0;
   --warn: #ffb347;
   --crit: #ff4d5e;
@@ -62,8 +63,8 @@
   --text: #d8f6ff;
 
   --holo-dim: rgba(var(--holo-rgb), 0.3);
-  --holo-glow: 0 0 0 1px rgba(var(--holo-rgb), 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.35);
+  --holo-glow:
+    0 0 0 1px rgba(var(--holo-rgb), 0.06), 0 8px 24px rgba(0, 0, 0, 0.35);
 
   --font-head: "Barlow Condensed", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -80,8 +81,7 @@
   --holo: #ff4d5e;
   --holo-rgb: 255, 77, 94;
   --holo-dim: rgba(255, 77, 94, 0.4);
-  --holo-glow: 0 0 0 1px rgba(255, 77, 94, 0.1),
-    0 8px 24px rgba(40, 0, 6, 0.5);
+  --holo-glow: 0 0 0 1px rgba(255, 77, 94, 0.1), 0 8px 24px rgba(40, 0, 6, 0.5);
 }
 
 /* ---------- Base ---------- */

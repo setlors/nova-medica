@@ -1,100 +1,141 @@
-# NOVA MEDICA
+<div align="center">
 
-**An offline holographic health PDA for astronauts on long-duration missions.**
+<img src="public/banner.png" alt="NOVA MEDICA banner" width="40%"/>
 
-Built for the **NASA Space Apps Challenge 2026**.
+<br/>
+<div align="center">
+<a href="https://nova-medica.vercel.app/">
+  <img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=20&duration=3200&pause=900&color=3DE0FF&center=true&vCenter=true&width=720&lines=No+doctor+on+board.;One+PDA+that+works+without+internet." alt="typing animation"/>
+</a>
+</div>
+<a href="https://nova-medica.vercel.app/"><img src="https://img.shields.io/badge/%E2%96%B6%20LAUNCH%20LIVE%20DEMO-nova--medica.vercel.app-3de0ff?style=for-the-badge&labelColor=04121a" alt="Live demo"/></a>
+
+</div>
+<br/>
+<div align="center">
+
+<a href="https://github.com/setlors"><img src="https://img.shields.io/badge/GitHub-setlors-3de0ff?style=for-the-badge&logo=github&logoColor=3de0ff&labelColor=04121a" alt="setlors on GitHub"/></a>
+&nbsp;
+<a href="https://github.com/d4xaris"><img src="https://img.shields.io/badge/GitHub-d4xaris-3de0ff?style=for-the-badge&logo=github&logoColor=3de0ff&labelColor=04121a" alt="d4xaris on GitHub"/></a>
+
+<sub>made by</sub>
+
+</div>
+
+## ◈ The problem
+
+On the way to Mars, a radio message takes up to about **20 minutes** one way. There is no doctor on board. Astronauts are not physicians, but a crewmate can collapse at any moment, and the first steps will be taken by the people standing next to them.
+
+## ◈ The solution
+
+**NOVA MEDICA** is a holographic PDA that works **without internet** and answers three questions:
+
+|     | Question                          | What the app does                                        |
+| --- | --------------------------------- | -------------------------------------------------------- |
+| -   | **How am I doing?**               | 3D body scanner, vitals, trends and color-coded statuses |
+| -   | **What do I measure, and how?**   | Guided measurements with plain-language instructions     |
+| -   | **Something happened. What now?** | Emergency Mode leads a witness from alarm to protocol    |
+
+> It does not diagnose and it is not a medical device. It estimates **urgency** and follows a protocol.
 
 ---
 
-## The problem
+## ◈ Features
 
-On the way to Mars, a radio signal needs up to ~20 minutes one way. There is no doctor on board, and a crewmate can lose consciousness without warning. Astronauts are not physicians, but the first minutes of any medical event will be theirs to handle.
+|     | Feature                        | What it does                                                                                                                                                                                                                                                                          |
+| --- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🫁  | **Holographic Body Scanner**   | Anatomical model under a custom cyan hologram shader. A scan beam sweeps the body, organs change color with live status, and the **heart pulses at the real BPM**. Click an organ for its function, space risks and linked vitals.                                                    |
+| 🩺  | **Guided Measurement**         | Seven vitals (heart rate, blood pressure, temperature, SpO₂, glucose, sleep, mood). Each has step-by-step instructions, why it matters in space, the normal range for the current environment and what to do if the value is off. Input is validated, so typos never reach the rules. |
+| 🚨  | **Emergency Mode**             | Started by SOS or an automatic sensor alarm. One question per screen, 72 px buttons, timer, **CPR metronome**, voice prompts and a camera flight to the organ. Alarm cause cards show which vital triggered it, and every answer goes into a time-stamped log.                        |
+| 🪐  | **Four environments**          | ISS, Orion, Moon base, Mars transit. Switching changes thresholds, risks, reminders, communication delay, medical kit and the 3D scene.                                                                                                                                               |
+| 📈  | **Vitals and charts**          | Normal-range band, status-colored points, personal baseline, 24 h / 7 days / mission periods. History is kept in IndexedDB and survives a reload.                                                                                                                                     |
+| ⏰  | **Reminders and Health Score** | Per-environment reminders, a Crew Health Score (0 to 100), streaks and achievements.                                                                                                                                                                                                  |
+| 📚  | **Databank**                   | NASA HRP hazards and related conditions. Entries unlock as you read or as vitals change, and each one cites a source.                                                                                                                                                                 |
+| 🛰   | **Ground Link**                | Offline JSON or PDF summary for the doctor on Earth. "Send to Earth" shows the simulated communication delay.                                                                                                                                                                         |
+| 🧪  | **Deterministic simulator**    | Seeded data with a daily rhythm and three scenarios: `normal`, `slowDrift`, `collapse`. Same seed, same demo.                                                                                                                                                                         |
 
-## The idea
+---
 
-NOVA MEDICA is a holographic PDA that runs **fully in the browser, without internet**, and answers three questions:
+## ◈ Tech stack
 
-1. **What is my condition right now?** A 3D body scanner, vitals, trends and colour-coded statuses.
-2. **What should I measure, and how?** Step-by-step guides: how to measure, why it matters in space, what is normal, what to do if it is not.
-3. **Something happened. What do I do?** Emergency Mode with a triage tree, a timer, a CPR metronome, voice prompts and a camera that flies to the affected body zone.
+<div align="center">
 
-## Principles
+<img src="https://img.shields.io/badge/TypeScript-3178c6?style=for-the-badge&logo=typescript&logoColor=white&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/React-61dafb?style=for-the-badge&logo=react&logoColor=61dafb&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/three.js-ffffff?style=for-the-badge&logo=threedotjs&logoColor=white&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/React%20Three%20Fiber-3de0ff?style=for-the-badge&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/GLSL%20shaders-5586a4?style=for-the-badge&logo=opengl&logoColor=white&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/Zustand-4dffb0?style=for-the-badge&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/Zod-3068b7?style=for-the-badge&logo=zod&logoColor=white&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/Recharts-22b5bf?style=for-the-badge&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/Vite-646cff?style=for-the-badge&logo=vite&logoColor=white&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/Bun-f9f1e1?style=for-the-badge&logo=bun&logoColor=f9f1e1&labelColor=04121a"/>
+<img src="https://img.shields.io/badge/Vercel-ffffff?style=for-the-badge&logo=vercel&logoColor=white&labelColor=04121a"/>
 
-- **Offline-first.** No backend. Everything runs in the browser (PWA).
-- **Data-driven.** Thresholds, instructions, triage and the Databank live in JSON, not in code. A new environment is added without touching the code.
-- **Explainable.** Every status says which value, which threshold and what to do next.
-- **Personal baseline.** A reading is compared with the _person's own_ norm, not only with a population average, because in space the norm shifts (fluid redistribution, pressure, sleep).
-- **Not a doctor.** Plain language, big buttons, every term explained.
+</div>
 
-## Features
+---
 
-| Module                 | What it does                                                                                                                                                           |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Body Scanner (3D)**  | Holographic body with a scan beam. Organs are coloured by status, and the heart pulses at the real BPM. Click a zone for its function, space risks and related vitals. |
-| **Guided Measurement** | Wizard for heart rate, blood pressure, temperature, SpO₂, glucose, sleep and mood, with plausibility checks.                                                           |
-| **Vitals & Charts**    | Normal-range band, status-coloured points, personal baseline, 24 h / 7 days / mission view. History is stored in IndexedDB.                                            |
-| **Rules Engine**       | Pure TypeScript: absolute thresholds, z-score baseline, trends, combined rules, data freshness.                                                                        |
-| **Emergency Mode**     | One question per screen, large buttons, voice, timer, CPR metronome, timestamped action log.                                                                           |
-| **Reminders**          | Scheduled measurement, exercise, sleep and mood check-ins. A `timeScale` speeds up time for demos.                                                                     |
-| **Environments**       | ISS, Orion, Moon base, Mars transit: different thresholds, risks, communication delay, medkit and scene.                                                               |
-| **Gamification**       | Crew Health Score, streaks and achievements (disabled during emergencies).                                                                                             |
-| **Databank**           | NASA HRP risk encyclopedia with sources and charts from NASA OSDR data.                                                                                                |
-| **Ground Link**        | Export a summary for the flight surgeon on Earth (JSON and PDF/print) with a simulated delay.                                                                          |
-| **Simulator**          | Deterministic, seeded data source with `normal`, `slowDrift` and `collapse` scenarios.                                                                                 |
+## ◈ Run it
 
-**Stretch goals:** rPPG pulse from video, voice commands, Hazard Radar, Mission Map.
+### ▶ Option 1: just open it
 
-## How the app decides a person's state
+**[nova-medica.vercel.app](https://nova-medica.vercel.app/)**
 
-The app does not "see" anything on its own. It collects signals, checks them against rules and shows the result. **It does not diagnose, it estimates urgency.**
+Works in a modern desktop browser (Chrome, Edge or Firefox). Use headphones or turn the sound on.
 
-```
-sources → ingest (validation) → evaluate (rules) → zone status → alerts → HUD + 3D
-```
+### ▶ Option 2: run locally
 
-Statuses: `ok` (green), `warn` (amber), `crit` (red), `unknown` (grey). Status is never shown by colour alone: there is always an icon and a word.
+You need **Git** and **Bun**. Bun is a JavaScript runtime and package manager, and this project uses it instead of npm.
 
-In microgravity there is no "fall", so an automatic alarm is triggered by an out-of-range pulse, critically low SpO₂, or a lack of movement and response.
-
-## Tech stack
-
-| Layer                      | Technology                                   |
-| -------------------------- | -------------------------------------------- |
-| Runtime / packages / tests | Bun (`bun test`)                             |
-| Language                   | TypeScript (strict)                          |
-| Build                      | Vite                                         |
-| UI                         | React                                        |
-| 3D                         | three, @react-three/fiber, @react-three/drei |
-| Effects                    | @react-three/postprocessing, GLSL shaders    |
-| Animation                  | GSAP, Framer Motion                          |
-| State                      | Zustand                                      |
-| Validation                 | Zod                                          |
-| Charts                     | Recharts                                     |
-| Offline storage            | idb-keyval (IndexedDB)                       |
-| PWA                        | vite-plugin-pwa (Workbox)                    |
-| Export                     | JSON, jsPDF / `window.print()`               |
-
-## Getting started
-
-**Requirements:** [Bun](https://bun.sh)
+**1. Install Bun** (skip if `bun --version` already works):
 
 ```bash
-git clone https://github.com/setlors/nova-medica.git
-bun install
-bun dev
+# macOS / Linux
+curl -fsSL https://bun.sh/install | bash
 ```
 
-| Command             | What it does                 |
-| ------------------- | ---------------------------- |
-| `bun dev`           | Start the dev server         |
-| `bun run build`     | Production build             |
-| `bun run preview`   | Preview the production build |
-| `bun test`          | Run the unit tests (`core/`) |
-| `bun run typecheck` | Type-check the project       |
+```powershell
+# Windows (PowerShell)
+powershell -c "irm bun.sh/install.ps1 | iex"
+```
 
-## Sources and acknowledgements
+Restart the terminal afterwards.
 
-- NASA Human Research Program (Human Research Roadmap, five hazards of spaceflight)
-- NASA-STD-3001 and public ISS medical operations materials
-- NASA Open Science Data Repository (OSDR)
-- Clinical guidelines (AHA for CPR, WHO) for Earth norms and first aid
+**2. Clone and start:**
+
+```bash
+git clone https://github.com/<setlors>/nova-medica.git
+cd nova-medica
+bun install
+bun run dev
+```
+
+Open the address printed in the terminal.
+
+**Other commands:**
+
+| Command             | What it does                                             |
+| ------------------- | -------------------------------------------------------- |
+| `bun run dev`       | Dev server with hot reload                               |
+| `bun run build`     | Type-check and production build                          |
+| `bun run preview`   | Serve the production build locally                       |
+| `bun run typecheck` | TypeScript check                                         |
+| `bun test`          | Run all tests (rules, triage, simulator, content, store) |
+
+## ◈ Credits
+
+- 3D anatomy model: **[Open Anatomy 3D](https://github.com/MervinR07/open-anatomy-3d)** by MervinR07, licensed under **CC BY 4.0**.
+- Fonts: Orbitron, Rajdhani and Share Tech Mono (SIL Open Font License), stored locally for offline use.
+
+---
+
+<div align="center">
+
+### ⚠ Disclaimer
+
+**Demonstration prototype. Not a medical device and does not replace a doctor. All data is simulated.**
+
+<br/>
+
+</div>

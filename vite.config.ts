@@ -7,19 +7,21 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico"],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,json,glb,woff2,ttf,mp3,png,svg,ico}"],
+        maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
+      },
       manifest: {
         name: "NOVA MEDICA",
         short_name: "NOVA",
-        description:
-          "Offline health-monitoring PDA for astronauts (demo prototype)",
+        description: "Offline holographic health PDA for astronauts",
         theme_color: "#04121a",
         background_color: "#04121a",
         display: "standalone",
-      },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,woff2,glb,mp3,json}"],
-        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024, // three.js bundle is bigger than the 2 MB default
+        icons: [
+          { src: "pwa-192.png", sizes: "192x192", type: "image/png" },
+          { src: "pwa-512.png", sizes: "512x512", type: "image/png" },
+        ],
       },
     }),
   ],

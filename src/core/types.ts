@@ -148,6 +148,7 @@ export interface Alert {
   message: string;
   suggestsEmergency: boolean;
   acknowledged?: boolean;
+  acknowledgedAt?: number;
 }
 
 export interface EmergencyLogEntry {

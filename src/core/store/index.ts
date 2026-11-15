@@ -31,6 +31,7 @@ import type {
 
 const MAX_ALERTS = 50;
 const MAX_READINGS_PER_VITAL = 5000;
+const ALARM_SNOOZE_MS = 30_000;
 
 export interface MeasurementResult {
   ok: boolean;
@@ -202,7 +203,12 @@ export const usePda = create<PdaState>()((set, get) => ({
       const alarmId = `alarm:${reading.id}`;
       const isSensor = reading.source === "sensor";
       const breach = isSensor && breachesAlarm(reading.id, reading.value);
-      if (breach && !alerts.some((a) => a.id === alarmId)) {
+      const existing = alerts.find((a) => a.id === alarmId);
+      const snoozeOver =
+        existing?.acknowledged === true &&
+        now - (existing.acknowledgedAt ?? 0) >= ALARM_SNOOZE_MS;
+
+      if (breach && (!existing || snoozeOver)) {
         const label = getVitalDef(reading.id)?.label ?? reading.id;
         const text = `Automatic alarm: ${label} ${reading.value} ${reading.unit}.`;
         alerts = [
@@ -214,7 +220,7 @@ export const usePda = create<PdaState>()((set, get) => ({
             message: text,
             suggestsEmergency: true,
           },
-          ...alerts,
+          ...alerts.filter((a) => a.id !== alarmId),
         ];
         emergencyLog = [...emergencyLog, { at: reading.takenAt, text }];
         if (mode !== "emergency") {
@@ -319,7 +325,13 @@ export const usePda = create<PdaState>()((set, get) => ({
   dismissAlert: (id) =>
     set((state) => ({
       alerts: state.alerts.map((a) =>
-        a.id === id ? { ...a, acknowledged: true } : a,
+        a.id === id
+          ? {
+              ...a,
+              acknowledged: true,
+              acknowledgedAt: state.simClock ?? Date.now(),
+            }
+          : a,
       ),
     })),
 
@@ -342,7 +354,13 @@ export const usePda = create<PdaState>()((set, get) => ({
       mode: "idle",
       cameraTarget: "overview",
       alerts: state.alerts.map((a) =>
-        a.id.startsWith("alarm:") ? { ...a, acknowledged: true } : a,
+        a.id.startsWith("alarm:")
+          ? {
+              ...a,
+              acknowledged: true,
+              acknowledgedAt: state.simClock ?? Date.now(),
+            }
+          : a,
       ),
       emergencyLog: [
         ...state.emergencyLog,

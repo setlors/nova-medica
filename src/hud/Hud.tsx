@@ -166,7 +166,10 @@ function VitalsWidgets() {
 function AlertList() {
   const alerts = usePda((s) => s.alerts);
   const dismiss = usePda((s) => s.dismissAlert);
-  const active = alerts.filter((a) => !a.acknowledged).slice(0, 4);
+  // automatic alarms stay visible while the sensor is still out of range
+  const active = alerts
+    .filter((a) => !a.acknowledged || a.id.startsWith("alarm:"))
+    .slice(0, 4);
   if (active.length === 0) return null;
   return (
     <Panel title="Alerts" aria-live="assertive">
@@ -178,6 +181,12 @@ function AlertList() {
               <span className="muted mono">{formatClock(a.at)}</span>
             </div>
             <p>{a.message}</p>
+            {a.acknowledged && (
+              <p className="muted">
+                Still out of range. If it persists, Emergency Mode will open
+                again.
+              </p>
+            )}
             <div className="row">
               {a.suggestsEmergency && (
                 <Button
@@ -188,9 +197,11 @@ function AlertList() {
                   Open Emergency Mode
                 </Button>
               )}
-              <Button size="sm" variant="ghost" onClick={() => dismiss(a.id)}>
-                Dismiss
-              </Button>
+              {!a.id.startsWith("alarm:") && (
+                <Button size="sm" variant="ghost" onClick={() => dismiss(a.id)}>
+                  Dismiss
+                </Button>
+              )}
             </div>
           </li>
         ))}

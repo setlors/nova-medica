@@ -51,13 +51,6 @@ function TopBar() {
     <header className="hud-bar">
       <span className="brand">NOVA MEDICA</span>
 
-      {env && (
-        <span className="muted mono">
-          {env.gravityG === 0 ? "Microgravity" : `${env.gravityG} g`} · comm
-          delay {formatDelay(env.commDelaySecOneWay)} one-way
-        </span>
-      )}
-
       <div className="bar-actions">
         {mode !== "emergency" && (
           <>

@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
 /* Fallback tokens. :where() has zero specificity, so ui/tokens.css from A wins whenever it is loaded. */
 :where(:root) {
   --bg: #04121a;
@@ -58,10 +64,12 @@
   pointer-events: auto;
 }
 .brand {
+  font-family: "Orbitron", var(--font-ui);
   font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--holo);
+  letter-spacing: 0.28em;
   font-size: 20px;
+  color: var(--holo);
+  text-shadow: 0 0 12px rgba(61, 224, 255, 0.55);
 }
 .bar-actions {
   margin-left: auto;
@@ -622,7 +630,32 @@
   list-style: none;
   padding-left: 0;
 }
-
+.bar-actions select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  background-color: rgba(4, 18, 26, 0.85);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%233de0ff' stroke-width='2'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding: 7px 32px 7px 12px;
+  border: 1px solid var(--holo);
+  transition:
+    box-shadow 0.15s,
+    background-color 0.15s;
+}
+.bar-actions select.input:hover,
+.bar-actions select.input:focus-visible {
+  box-shadow: 0 0 14px rgba(61, 224, 255, 0.4);
+  background-color: rgba(8, 40, 56, 0.9);
+}
+.bar-actions select.input option {
+  background: #04121a;
+  color: var(--text);
+}
 /* ----- small screens ----- */
 @media (max-width: 900px) {
   .hud-left {

@@ -2,7 +2,6 @@ import type { Scenario, VitalId, VitalReading } from "../types";
 
 export const HOUR_MS = 3_600_000;
 export const DAY_MS = 86_400_000;
-const COLLAPSE_TICK = 10;
 
 export interface SimTick {
   clock: number;
@@ -169,14 +168,10 @@ function applyScenario(id: VitalId, value: number, s: ScenarioState): number {
     if (id === "temperature") return value + 0.9 * ramp;
   }
   if (s.scenario === "collapse") {
-    // the collapse is counted in TICKS, not simulated time, so the demo does not depend on timeScale
-    if (s.tick >= COLLAPSE_TICK) {
-      if (id === "heartRate") return 24;
-      if (id === "spo2") return 78;
-    } else if (s.tick >= 3) {
+    if (s.tick >= 3) {
       const k = s.tick - 3;
-      if (id === "heartRate") return 100 + k * 8;
-      if (id === "spo2") return 94 - k * 0.4;
+      if (id === "heartRate") return Math.min(195, 100 + k * 12);
+      if (id === "spo2") return Math.max(84, 94 - k * 0.8);
     }
   }
   return value;

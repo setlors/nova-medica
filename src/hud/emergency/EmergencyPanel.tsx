@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { triageTree } from "../../core/content";
+import { getVitalDef, triageTree } from "../../core/content";
 import type { TriageState } from "../../core/rules/triage";
 import {
   answerTriage,
@@ -10,7 +10,7 @@ import {
 import { usePda } from "../../core/store";
 import { Button } from "../../ui/Button";
 import { StatusBadge } from "../../ui/Panel";
-import { formatClock } from "../hudStore";
+import { formatClock, formatReading } from "../hudStore";
 
 function useElapsed() {
   const start = useRef(Date.now());
@@ -125,8 +125,10 @@ export function EmergencyPanel() {
 
   const elapsed = useElapsed();
   const log = usePda((s) => s.emergencyLog);
-  const alarm = usePda((s) =>
-    s.alerts.find((a) => a.suggestsEmergency && !a.acknowledged),
+  const alerts = usePda((s) => s.alerts);
+  const vitals = usePda((s) => s.vitals);
+  const activeAlarms = alerts.filter(
+    (a) => a.suggestsEmergency && !a.acknowledged,
   );
 
   const node = getNode(triageTree, state.nodeId);
@@ -208,10 +210,31 @@ export function EmergencyPanel() {
         </div>
       </div>
 
-      {alarm && (
-        <p className="em-banner" role="alert">
-          <StatusBadge status={alarm.severity} /> {alarm.message}
-        </p>
+      {activeAlarms.length > 0 && (
+        <section className="em-alarms" role="alert" aria-label="Alarm cause">
+          {activeAlarms.map((a) => {
+            const def = a.vital ? getVitalDef(a.vital) : undefined;
+            const latest = a.vital ? vitals[a.vital]?.at(-1) : undefined;
+            return (
+              <div key={a.id} className="em-alarm">
+                <div className="em-alarm-tag">
+                  <StatusBadge status={a.severity} /> Alarm cause
+                </div>
+                {def && latest ? (
+                  <>
+                    <div className="em-alarm-name">{def.label}</div>
+                    <div className="em-alarm-value mono">
+                      {formatReading(latest)}
+                    </div>
+                  </>
+                ) : (
+                  <div className="em-alarm-name">{a.message}</div>
+                )}
+                <div className="em-alarm-msg muted">{a.message}</div>
+              </div>
+            );
+          })}
+        </section>
       )}
 
       <div className="em-main" aria-live="polite">

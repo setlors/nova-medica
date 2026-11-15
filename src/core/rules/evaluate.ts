@@ -1,4 +1,3 @@
-export {};
 import type {
   Baseline,
   Environment,

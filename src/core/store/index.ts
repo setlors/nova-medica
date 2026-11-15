@@ -177,6 +177,7 @@ export const usePda = create<PdaState>()((set, get) => ({
       const previousStatus = state.evaluations[reading.id]?.status;
 
       let alerts = syncRuleAlerts(state.alerts, d.hits, now);
+      // a per-vital alert is created only when the status changes (so a sensor stream does not flood the list)
       if (
         ev &&
         (ev.status === "warn" || ev.status === "crit") &&
@@ -195,6 +196,7 @@ export const usePda = create<PdaState>()((set, get) => ({
         ].slice(0, MAX_ALERTS);
       }
 
+      // automatic alarm: sensor data only
       let { mode, cameraTarget } = state;
       let emergencyLog = state.emergencyLog;
       const alarmId = `alarm:${reading.id}`;

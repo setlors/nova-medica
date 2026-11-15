@@ -1,14 +1,15 @@
-export {};
 export const CONTRACT_VERSION = 2;
 
 export const STATUSES = ["ok", "warn", "crit", "unknown"] as const;
 export const MODES = ["idle", "measure", "emergency"] as const;
+
 export const ENVIRONMENT_IDS = [
   "iss",
   "orion",
   "moon-base",
   "mars-transit",
 ] as const;
+
 export const ZONE_IDS = [
   "heart",
   "brain",
@@ -18,6 +19,7 @@ export const ZONE_IDS = [
   "immune",
   "metabolism",
 ] as const;
+
 export const VITAL_IDS = [
   "heartRate",
   "bloodPressure",
@@ -27,6 +29,7 @@ export const VITAL_IDS = [
   "sleep",
   "mood",
 ] as const;
+
 export const HAZARD_IDS = [
   "radiation",
   "isolation",
@@ -34,6 +37,7 @@ export const HAZARD_IDS = [
   "gravity",
   "closedEnvironment",
 ] as const;
+
 export const SCENARIOS = ["normal", "slowDrift", "collapse"] as const;
 export const READING_SOURCES = ["manual", "sensor", "self-report"] as const;
 
@@ -81,7 +85,12 @@ export interface VitalDef {
     plausible: Range;
     thresholds: Thresholds;
   };
-  actions: { warn: string[]; crit: string[] };
+
+  actions: {
+    warn: string[];
+    crit: string[];
+  };
+
   sources: string[];
   unverified?: boolean;
 }
@@ -94,7 +103,11 @@ export interface Environment {
   risks: HazardId[];
   medkit: string[];
   thresholdOverrides: Partial<Record<VitalId, Thresholds>>;
-  reminders: { vital: VitalId; everyMinutes: number }[];
+
+  reminders: {
+    vital: VitalId;
+    everyMinutes: number;
+  }[];
 }
 
 export interface Zone {
@@ -174,7 +187,11 @@ export interface DatabankChart {
   title: string;
   unit: string;
   source: string;
-  points: { label: string; value: number }[];
+
+  points: {
+    label: string;
+    value: number;
+  }[];
 }
 
 export interface DatabankEntry {
@@ -189,3 +206,14 @@ export interface DatabankEntry {
   unverified?: boolean;
   chart?: DatabankChart;
 }
+
+export const STATUS_COLOR: Record<string, string> = {
+  normal: "#2ee6a6",
+  ok: "#2ee6a6",
+  warning: "#ffb020",
+  caution: "#ffb020",
+  critical: "#ff3b4a",
+  alert: "#ff3b4a",
+  unknown: "#6b7a8c",
+  offline: "#6b7a8c",
+};

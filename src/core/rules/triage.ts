@@ -1,4 +1,3 @@
-export {};
 import type { TriageNode, TriageTree } from "../types";
 
 export interface TriageStep {

@@ -2,80 +2,81 @@
   {
     "id": "heart",
     "label": "Heart",
-    "meshNames": ["Heart"],
+    "meshNames": ["heart"],
     "relatedVitals": ["heartRate", "bloodPressure"],
-    "function": "Pumps blood through the body and delivers oxygen and nutrients to every organ.",
+    "function": "Pumps blood around the body. Your pulse and blood pressure show how hard it is working.",
     "spaceRisks": [
-      "Fluid shifts toward the head in microgravity and change the load on the heart.",
-      "Long-term radiation exposure may raise cardiovascular risk.",
-      "Without regular exercise the heart muscle weakens (cardiovascular deconditioning)."
+      "Fluid shifts toward the head in microgravity and changes blood pressure.",
+      "Without exercise the heart muscle can weaken.",
+      "Long-term radiation exposure may raise cardiovascular risk."
     ]
   },
   {
     "id": "brain",
     "label": "Brain",
-    "meshNames": ["Brain"],
+    "meshNames": ["brain"],
     "relatedVitals": ["sleep", "mood"],
-    "function": "Controls thinking, mood, sleep and every other system of the body.",
+    "function": "Controls thinking, mood, sleep and every other organ.",
     "spaceRisks": [
-      "Sleep disruption from light cycles, noise and schedules.",
-      "Isolation, confinement and distance from Earth affect behavioral health.",
-      "Fluid shifts and radiation may affect brain function and vision."
+      "Disturbed sleep and day/night rhythm reduce alertness.",
+      "Isolation and confinement can cause anxiety and irritability.",
+      "High CO2 in closed spaces can cause headache and drowsiness."
     ]
   },
   {
     "id": "lungs",
     "label": "Lungs",
-    "meshNames": ["Lungs"],
+    "meshNames": ["lung_left", "lung_right"],
     "relatedVitals": ["spo2"],
-    "function": "Bring oxygen into the blood and remove carbon dioxide.",
+    "function": "Bring oxygen into the blood. Blood oxygen (SpO2) shows how well that works.",
     "spaceRisks": [
-      "Raised CO2 or low O2 in a closed cabin lowers blood oxygen.",
-      "Dust and particles stay airborne in microgravity and irritate the airways."
+      "Cabin air quality and CO2 level affect breathing.",
+      "Dust particles behave differently in low gravity.",
+      "Low SpO2 can be an early sign of a serious problem."
     ]
   },
   {
     "id": "bones",
     "label": "Bones",
-    "meshNames": ["Skeleton"],
+    "meshNames": ["skeleton"],
     "relatedVitals": [],
-    "function": "Support the body, protect organs and store calcium.",
+    "function": "Support the body and store calcium.",
     "spaceRisks": [
-      "Bone density is lost in microgravity without loading and exercise.",
-      "Calcium released from bones can raise the risk of kidney stones."
+      "Bone density drops without the load of gravity.",
+      "Regular resistance exercise is needed to slow the loss."
     ]
   },
   {
     "id": "muscles",
     "label": "Muscles",
-    "meshNames": ["Muscles"],
+    "meshNames": ["muscles"],
     "relatedVitals": [],
-    "function": "Produce movement and keep posture and strength.",
+    "function": "Move the body and keep posture.",
     "spaceRisks": [
-      "Muscles that fight gravity on Earth weaken quickly in space.",
-      "Daily resistance exercise is needed to limit strength loss."
+      "Muscles weaken quickly when they do not work against gravity.",
+      "Daily exercise is part of the mission schedule."
     ]
   },
   {
     "id": "immune",
     "label": "Immune system",
-    "meshNames": ["Spleen"],
+    "meshNames": ["spleen", "thymus"],
     "relatedVitals": ["temperature"],
-    "function": "Defends the body against infections.",
+    "function": "Defends the body against infection. Body temperature is a simple sign of its activity.",
     "spaceRisks": [
-      "Spaceflight changes immune function and can reactivate dormant viruses.",
-      "Infections spread easily in a small closed cabin."
+      "Stress, radiation and disturbed sleep can change immune response.",
+      "A fever far from Earth needs attention early."
     ]
   },
   {
     "id": "metabolism",
     "label": "Metabolism",
-    "meshNames": ["Liver"],
+    "meshNames": ["liver", "pancreas", "stomach"],
     "relatedVitals": ["glucose"],
-    "function": "Turns food into energy and keeps blood sugar in balance.",
+    "function": "Turns food into energy. Blood glucose shows how well the body handles it.",
     "spaceRisks": [
-      "Stress, changed diet and low activity can affect blood sugar.",
-      "Inadequate nutrition is one of the risks of long missions."
+      "Changes in diet, activity and sleep can shift blood sugar.",
+      "Reduced appetite is common in the first days of spaceflight."
     ]
   }
 ]

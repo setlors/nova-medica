@@ -19,6 +19,7 @@
     "gsap": "^3.15.1",
     "idb-keyval": "^6.3.0",
     "jspdf": "^4.2.1",
+    "open-anatomy-3d": "^0.1.0",
     "postprocessing": "^6.39.6",
     "react": "^19",
     "react-dom": "^19",
